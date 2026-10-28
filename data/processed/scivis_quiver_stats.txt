@@ -1,0 +1,20 @@
+t1 01 Jul 2019 mean speed 3.20 p95 5.00 max 10.6 | domain vector-mean from 236 deg, CONUS steadiness 0.27
+t2 11 Jul 2019 mean speed 3.51 p95 5.30 max 9.8 | domain vector-mean from 213 deg, CONUS steadiness 0.31
+t3 21 Jul 2019 mean speed 3.33 p95 5.00 max 9.3 | domain vector-mean from 186 deg, CONUS steadiness 0.27
+t4 31 Jul 2019 mean speed 3.04 p95 5.40 max 9.7 | domain vector-mean from 120 deg, CONUS steadiness 0.19
+t5 10 Aug 2019 mean speed 3.19 p95 5.20 max 8.3 | domain vector-mean from 180 deg, CONUS steadiness 0.21
+t6 20 Aug 2019 mean speed 3.16 p95 4.90 max 8.3 | domain vector-mean from 155 deg, CONUS steadiness 0.35
+t7 30 Aug 2019 mean speed 3.29 p95 5.20 max 9.3 | domain vector-mean from 191 deg, CONUS steadiness 0.13
+t8 09 Sep 2019 mean speed 3.95 p95 6.80 max 10.7 | domain vector-mean from 111 deg, CONUS steadiness 0.30
+t9 19 Sep 2019 mean speed 3.97 p95 6.30 max 11.8 | domain vector-mean from 87 deg, CONUS steadiness 0.33
+t10 29 Sep 2019 mean speed 5.21 p95 8.90 max 16.0 | domain vector-mean from 104 deg, CONUS steadiness 0.32
+Vector transform check on t10 (4,863 arrows): naive: median 4.97, p95 9.53, max 11.98 deg; speed kept True | corrected: median 0.00, p95 0.00, max 0.00 deg; speed kept True
+Fig16 aliasing stride20: median |dangle| 3.2, >45deg 0.007, median speed ratio 0.98, median steadiness 0.99, n 1220
+                                   strategy  seeds  streamlines  coverage  line_segments
+0                             Density-based      0          106     0.557           2775
+1                      Uniform grid seeding    126           52     0.389           1488
+2                            Random seeding    126           56     0.388           1530
+3  Feature-based: seeds in the top 5% speed    126           21     0.159            617
+Fig22 Hurricane Barry 2019-07-13: speed max 15.0 mean 6.1 m/s; pr max 223.0 mm at 29.77N -92.06E; area>=100mm 5,216 km2 mean div -7.67e-5/s (71% convergent) vs -0.16e-5/s where <10mm; area-mean vorticity -0.79e-5/s (sampled days -1.14..+0.43e-5/s)
+Fig22 Hurricane Dorian 2019-09-05: speed max 13.5 mean 6.9 m/s; pr max 251.2 mm at 33.53N -79.10E; area>=100mm 41,456 km2 mean div -1.46e-5/s (52% convergent) vs +0.20e-5/s where <10mm; area-mean vorticity +0.70e-5/s (sampled days -1.12..+0.62e-5/s)
+Fig22 Tropical Storm Imelda 2019-09-18: speed max 7.7 mean 3.4 m/s; pr max 706.9 mm at 29.94N -94.18E; area>=100mm 14,656 km2 mean div -6.74e-5/s (88% convergent) vs +0.50e-5/s where <10mm; area-mean vorticity +0.57e-5/s (sampled days -0.25..+0.37e-5/s)

@@ -1,0 +1,75 @@
+:root {
+  --bg: #f7f7f5;
+  --panel: #ffffff;
+  --ink: #1d1d1f;
+  --muted: #5f6368;
+  --line: #d9d9d6;
+  --accent: #1f5fa8;
+  --accent-soft: #e5eef9;
+  --font: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 14px; }
+a { color: var(--accent); }
+header.top {
+  display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap;
+  padding: 12px 20px 10px; background: var(--panel); border-bottom: 1px solid var(--line);
+}
+header.top h1 { font-size: 19px; margin: 0; font-weight: 650; }
+header.top .sub { color: var(--muted); font-size: 13px; }
+header.top nav { margin-left: auto; display: flex; gap: 14px; font-size: 13px; }
+header.top nav a { text-decoration: none; }
+header.top nav a.active { font-weight: 650; color: var(--ink); border-bottom: 2px solid var(--accent); }
+.controls {
+  display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center;
+  padding: 10px 20px; background: var(--panel); border-bottom: 1px solid var(--line); font-size: 13px;
+}
+.controls label { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+.controls select, .controls input[type=text] {
+  font: inherit; padding: 3px 6px; border: 1px solid var(--line); border-radius: 4px; background: #fff; color: var(--ink);
+}
+.controls input[type=range] { width: 120px; }
+.controls button {
+  font: inherit; padding: 4px 12px; border: 1px solid var(--line); border-radius: 4px; background: #fff; cursor: pointer;
+}
+.controls button:hover { background: var(--accent-soft); }
+.controls .val { min-width: 34px; color: var(--ink); font-variant-numeric: tabular-nums; }
+.layout { display: flex; gap: 0; }
+.chart { flex: 1; min-width: 0; padding: 8px 12px; }
+.side {
+  width: 300px; flex: none; padding: 12px 16px; background: var(--panel); border-left: 1px solid var(--line);
+  font-size: 13px; line-height: 1.45; min-height: calc(100vh - 110px);
+}
+.side h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 14px 0 6px; }
+.side h3:first-child { margin-top: 0; }
+.legend-item { display: flex; align-items: center; gap: 7px; cursor: pointer; padding: 2px 0; user-select: none; }
+.legend-item.off { opacity: .35; }
+.swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+.status { color: var(--muted); font-size: 12.5px; }
+.status b { color: var(--ink); }
+.tooltip {
+  position: fixed; pointer-events: none; background: rgba(255,255,255,.97); border: 1px solid var(--line);
+  border-radius: 6px; padding: 8px 10px; font-size: 12.5px; box-shadow: 0 2px 10px rgba(0,0,0,.12);
+  max-width: 320px; line-height: 1.4; opacity: 0; transition: opacity .12s; z-index: 10;
+}
+.tooltip .t { font-weight: 650; margin-bottom: 3px; }
+.tooltip table { border-collapse: collapse; }
+.tooltip td { padding: 0 8px 0 0; }
+.tooltip td.v { text-align: right; font-variant-numeric: tabular-nums; }
+.help { color: var(--muted); font-size: 12.5px; }
+.help li { margin-bottom: 3px; }
+svg text { font-family: var(--font); }
+.axis text { font-size: 11px; fill: #333; }
+.axis path, .axis line { stroke: #999; }
+.axis-title { font-size: 12px; font-weight: 600; fill: var(--ink); cursor: move; }
+.axis-title.inverted { fill: #b0431b; }
+.brush .selection { fill: var(--accent); fill-opacity: .14; stroke: var(--accent); stroke-width: 1.2; }
+.footer-note { color: var(--muted); font-size: 12px; padding: 4px 20px 14px; }
+.breadcrumb { font-size: 13px; padding: 6px 2px; }
+.breadcrumb span.crumb { color: var(--accent); cursor: pointer; }
+.breadcrumb span.crumb:hover { text-decoration: underline; }
+.breadcrumb span.sep { color: var(--muted); margin: 0 6px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; padding: 20px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; }
+.card h2 { font-size: 16px; margin: 0 0 6px; }
+.card p { margin: 0 0 8px; color: var(--muted); line-height: 1.45; }

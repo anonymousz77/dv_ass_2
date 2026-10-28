@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Disaster-Regime Network</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="lib/d3.v7.9.0.min.js"></script>
+  <script>window.d3 || document.write('<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"><\/script>');</script>
+  <script src="data/network_data.js"></script>
+</head>
+<body>
+  <header class="top">
+    <h1>Node-link diagram: countries with similar disaster regimes</h1>
+    <span class="sub">Layouts computed with NetworkX · EM-DAT 1970–2022 · DAS732 A2 · Team Pythagoras</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="network.html" class="active">Network</a>
+      <a href="parallel_coordinates.html">Parallel coordinates</a>
+      <a href="treemap.html">Treemap</a>
+    </nav>
+  </header>
+  <div class="controls">
+    <label>Layout <select id="layout"></select></label>
+    <label>Colour <select id="color"><option value="community">Louvain community</option><option value="continent">Continent</option></select></label>
+    <label>Node size <select id="size">
+      <option value="events">Events</option><option value="deaths">Deaths</option>
+      <option value="degree">Degree</option><option value="betweenness">Betweenness</option></select></label>
+    <label>Min. edge similarity <input type="range" id="minWeight" min="0.70" max="0.99" step="0.01" value="0.70"><span class="val" id="minWeightVal"></span></label>
+    <label>Min. events <input type="range" id="minEvents" min="1" max="3" step="0.05" value="1"><span class="val" id="minEventsVal"></span></label>
+    <label>Labels <select id="labels"><option value="top">Top 25 by events</option><option value="all">All</option><option value="none">None</option></select></label>
+    <label>Find <input type="text" id="search" placeholder="country…" size="12"></label>
+    <button id="reset">Reset</button>
+  </div>
+  <div class="layout">
+    <div class="chart"><svg id="net"></svg></div>
+    <aside class="side">
+      <h3>Shown</h3>
+      <div class="status" id="status"></div>
+      <h3>Continents (click to filter)</h3>
+      <div id="contFilter"></div>
+      <h3>Legend</h3>
+      <div id="legend"></div>
+      <h3>Selected country</h3>
+      <div class="status" id="info"><i>Click a node to focus on it and its neighbours.</i></div>
+      <h3>Layout quality (NetworkX)</h3>
+      <div class="status" id="metrics"></div>
+      <h3>Interactions</h3>
+      <ul class="help">
+        <li>Switch <b>layout</b> to compare algorithms (animated transition).</li>
+        <li><b>Filter</b> weak edges or small countries with the sliders; toggle continents.</li>
+        <li><b>Click</b> a node to highlight its neighbourhood; click the background to clear.</li>
+        <li><b>Scroll</b> to zoom, drag the background to pan, <b>drag</b> a node to move it.</li>
+      </ul>
+    </aside>
+  </div>
+  <div class="footer-note">Node = country (≥ 10 events, 1970–2022). Edge = similar mix of hazard types (Bhattacharyya coefficient of the 15-category hazard profiles; 4 nearest neighbours plus the maximum spanning tree, dashed). Communities: Louvain on the similarity-weighted graph.</div>
+  <script src="js/common.js"></script>
+  <script src="js/network.js"></script>
+</body>
+</html>

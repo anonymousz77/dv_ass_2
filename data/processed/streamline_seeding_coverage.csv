@@ -1,0 +1,5 @@
+strategy,seeds,streamlines,coverage,line_segments
+Density-based,0,106,0.557,2775
+Uniform grid seeding,126,52,0.389,1488
+Random seeding,126,56,0.388,1530
+Feature-based: seeds in the top 5% speed,126,21,0.159,617

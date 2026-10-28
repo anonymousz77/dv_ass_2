@@ -1,0 +1,12 @@
+# Python caches
+__pycache__/
+*.pyc
+
+# temporary download / build files
+*.part
+*.tmp.pdf
+report/source/figures/
+
+# daily-context gridMET files, re-created by code/data_prep/download_gridmet.py
+data/raw/gridmet/*_daily_stride4.nc
+data/raw/gridmet/pr_2019JAS_daily.nc

@@ -1,0 +1,919 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DAS732 A2 Report – Team Pythagoras</title>
+<style>
+  @page {
+    size: A4;
+    margin: 16mm 15mm 17mm 15mm;
+    @bottom-center { content: counter(page); font-family: "Times New Roman", Times, serif; font-size: 9pt; }
+  }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-family: "Times New Roman", Times, serif; font-size: 10pt; line-height: 1.23; color: #000; margin: 0; background: #fff; }
+  .title { text-align: center; font-size: 21pt; line-height: 1.15; margin: 0 0 2mm; font-weight: normal; }
+  .subtitle { text-align: center; font-size: 11pt; margin: 0 0 4mm; }
+  .authors { display: flex; justify-content: center; gap: 9mm; text-align: center; font-size: 10pt; margin: 0 0 1.5mm; }
+  .authors .name { font-size: 11pt; }
+  .affil { text-align: center; font-style: italic; font-size: 9.5pt; margin-bottom: 5mm; }
+  .cols { column-count: 2; column-gap: 6mm; text-align: justify; hyphens: auto; }
+  .abstract, .keywords { font-size: 9pt; font-weight: bold; text-indent: 0 !important; }
+  .abstract i, .keywords i { font-weight: bold; }
+  h2 { font-size: 10pt; text-align: center; font-variant: small-caps; font-weight: normal; letter-spacing: .02em;
+       margin: 4mm 0 1.6mm; break-after: avoid; }
+  h3 { font-size: 10pt; font-style: italic; font-weight: normal; margin: 2.6mm 0 1mm; break-after: avoid; }
+  p { margin: 0; text-indent: 1.2em; }
+  h2 + p, h3 + p, .noind { text-indent: 0; }
+  ul.tight { margin: 1mm 0 1mm 0; padding-left: 4.5mm; }
+  ul.tight li { margin-bottom: 0.6mm; }
+  figure { column-span: all; margin: 2.5mm 0 3.5mm; break-inside: avoid; text-align: center; }
+  figure img { max-width: 100%; max-height: 222mm; display: block; margin: 0 auto; }
+  figure.h80 img { max-height: 120mm; }
+  figure.h95 img { max-height: 140mm; }
+  figure.h75 img { max-height: 82mm; }
+  figure.h60 img { max-height: 105mm; }
+  figure.h65 img { max-height: 98mm; }
+  figure.row { display: flex; gap: 2mm; flex-wrap: wrap; justify-content: center; }
+  figure.row .sub { flex: 1 1 31%; }
+  figure.row .sub img { width: 100%; }
+  figure.row figcaption { flex-basis: 100%; }
+  .sublabel { font-size: 8pt; margin-top: 0.6mm; }
+  figcaption { font-size: 8pt; text-align: justify; margin-top: 1.4mm; line-height: 1.2; }
+  figcaption b { font-weight: normal; }
+  .tbl { break-inside: avoid; margin: 2mm 0 3mm; }
+  .tbl.wide { column-span: all; }
+  .tcap { text-align: center; font-size: 8pt; font-variant: small-caps; margin-bottom: 1.2mm; line-height: 1.25; }
+  .tcap .tn { display: block; font-variant: normal; letter-spacing: .05em; }
+  table { border-collapse: collapse; width: 100%; font-size: 7.8pt; line-height: 1.18; }
+  th, td { padding: 0.6mm 1.1mm; vertical-align: top; text-align: left; }
+  thead th { border-top: 1px solid #000; border-bottom: 0.6px solid #000; font-weight: normal; font-style: italic; }
+  tbody tr:last-child td { border-bottom: 1px solid #000; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+  .eq { text-align: center; margin: 1.4mm 0; text-indent: 0; }
+  .eqn { float: right; }
+  .refs { font-size: 8pt; line-height: 1.2; }
+  .refs p { text-indent: -6mm; padding-left: 6mm; margin-bottom: 0.7mm; }
+  code, .mono { font-family: Consolas, "Courier New", monospace; font-size: 8.3pt; }
+  .owner { font-style: italic; }
+</style>
+</head>
+<body>
+
+<h1 class="title">Scientific and Information Visualization of Summer-2019 US Meteorology (gridMET) and a Century of Global Natural-Disaster Records (EM-DAT)</h1>
+<div class="subtitle">DAS732 Data Visualization – Programming Assignment 2 (A2) · Team Pythagoras</div>
+<div class="authors">
+  <div><div class="name">Lakshya Jain</div>BT2024044</div>
+  <div><div class="name">Kalpit</div>BT2024093</div>
+  <div><div class="name">Arnav</div>BT2024233</div>
+</div>
+<div class="affil">International Institute of Information Technology Bangalore, Bengaluru, India</div>
+
+<div class="cols">
+
+<p class="abstract"><i>Abstract</i>—This report presents the six visualization tasks of A2. For SciVis we use the gridMET daily
+meteorological dataset for our allotted slice, July–September 2019, sampled uniformly every ten days (ten time instances).
+Daily maximum temperature and precipitation are colour-mapped with sequential, rainbow, diverging, discrete and logarithmic
+schemes under global and local normalisation; vapour pressure deficit is contoured with our own vectorised Marching Squares
+implementation, which matches the contourpy reference to 3×10<sup>−14</sup>°, and with filled contours; and the 10 m wind is shown
+with quiver plots and streamlines under different grid-sampling and seeding strategies, complemented by 4 km close-ups of three
+storms that fall between the samples. Animated GIFs accompany every task. For
+InfoVis we use our A1 dataset, the EM-DAT natural-disaster country profiles, from which we derive (i) a 167-node network of
+countries with similar hazard regimes, compared under five NetworkX layouts, explored in an interactive viewer and exported to
+Gephi, (ii) a
+multivariate table shown in a JavaScript parallel-coordinates plot with cluster-based edge bundling, brushing and axis
+reordering, and four hierarchies shown in a zoomable treemap with six tiling algorithms, and (iii) yearly, five-year and decadal
+series shown as horizon and ridgeline plots, including a share anomaly that separates changes in the hazard mix from the growth
+of reporting. The visualizations expose both physical signals—a heat wave, Tropical Storm Imelda,
+an early-season cold outbreak, the seasonal retreat of dry air—and data artefacts such as quantisation ties, reporting bias in
+disaster damage and state succession.</p>
+<p class="keywords"><i>Index Terms</i>—colour mapping, marching squares, quiver plot, streamlines, node-link diagram, graph layout,
+parallel coordinates, edge bundling, treemap, horizon chart, ridgeline plot, gridMET, EM-DAT.</p>
+
+<h2>I. Introduction</h2>
+<p>A2 asks for three SciVis tasks on a scalar/vector meteorological field and three InfoVis tasks on the dataset used in A1.
+Every member owns exactly one SciVis and one InfoVis task (Table I); data download, cleaning and processing were done jointly,
+as permitted. Section II describes both datasets, the choice of period and time instances, and all preprocessing.
+Sections III–V cover colour mapping, contour mapping and vector-field visualization; Sections VI–VIII cover the node-link
+diagram, the parallel coordinates and treemap, and the horizon and ridgeline plots. Section IX discusses what the tasks have in
+common and their limitations. Every figure is stored at full resolution in the <span class="mono">images/</span> folder under its
+figure index (e.g. <span class="mono">Fig16_….png</span>), together with the GIF animations; the code and a README are in
+<span class="mono">code/</span>.</p>
+
+<div class="tbl">
+<div class="tcap"><span class="tn">TABLE I</span>Task ownership</div>
+<table>
+<thead><tr><th>Member</th><th>SciVis task</th><th>InfoVis task</th></tr></thead>
+<tbody>
+<tr><td>Lakshya Jain (BT2024044)</td><td>Colour mapping (Sec. III, Figs. 2–9)</td><td>Parallel coordinates with edge bundling and zoomable treemap in JavaScript (Sec. VII, Figs. 28–36)</td></tr>
+<tr><td>Kalpit (BT2024093)</td><td>Contour mapping (Sec. IV, Figs. 10–15)</td><td>Node-link diagram and layout comparison with NetworkX (Sec. VI, Figs. 23–27)</td></tr>
+<tr><td>Arnav (BT2024233)</td><td>Quiver plots and streamlines (Sec. V, Figs. 16–22)</td><td>Horizon and ridgeline plots (Sec. VIII, Figs. 37–43)</td></tr>
+</tbody></table>
+</div>
+
+<h2>II. Datasets and Data Handling</h2>
+<h3>A. gridMET slice and the choice of period</h3>
+<p>gridMET [1], [2] provides daily surface meteorology for the contiguous United States (CONUS) on a 1/24° (≈4 km) latitude–longitude
+grid of 585 × 1386 cells. Our team was allotted <b>July–September 2019</b> (92 days). The quarter is well suited to the three
+SciVis tasks because it spans the transition from the peak of summer to early autumn: the area-weighted CONUS mean of the daily
+maximum temperature falls from about 30 °C in July to 22 °C at the end of September, the mean vapour pressure deficit drops by
+about 40 % and the mean 10 m wind speed rises by about 60 % as the first autumn troughs arrive (Fig. 1). The window also contains
+the peak of the Atlantic hurricane season and several well-documented extremes [8]: Hurricane Barry (Louisiana, 13–15 Jul),
+the central and eastern heat wave of 18–21 Jul, Hurricane Dorian along the Carolinas coast (5–6 Sep), Tropical Storm Imelda
+(south-east Texas, 17–19 Sep) and an unusually early
+snowstorm and cold outbreak in the northern Rockies (27–30 Sep). The slice therefore offers both a seasonal trend and sharp
+synoptic features.</p>
+<p>Five variables were used (Table II): daily maximum temperature <i>tmmx</i> and precipitation <i>pr</i> for colour mapping,
+daily mean vapour pressure deficit <i>vpd</i> for contour mapping, and, as required, wind speed <i>vs</i> and direction <i>th</i> at
+10 m for the vector-field task. The data were obtained from the gridMET THREDDS NetCDF Subset Service, which serves the same
+values as the yearly <span class="mono">&lt;var&gt;_2019.nc</span> files listed under “Direct download of NetCDF files”, but lets us
+request only what is needed: (i) the ten sampled days at full resolution (16 MB per variable); (ii) all 92 days of temperature,
+VPD and wind at every fourth cell (≈16 km), whose domain means and percentiles a 16 km subsample estimates well; (iii) all 92 days
+of precipitation at full resolution, because storm maxima are only a few cells wide and the 16 km subsample underestimates the
+daily maximum by a median of 12 % and up to 50 % (Imelda: 528 instead of 707 mm on 18 Sep); and (iv) wind and precipitation at full resolution over the Gulf and
+south-east coasts on the storm days between the samples (Sec. V-G). The server returns uncompressed NetCDF-3, so products (iii)
+and (iv) are stored with zlib compression. All fields are processed with xarray [5] and plotted with matplotlib [6].</p>
+
+<div class="tbl">
+<div class="tcap"><span class="tn">TABLE II</span>gridMET variables and sampled time instances</div>
+<table>
+<thead><tr><th>Variable</th><th>Units (storage step)</th><th>Used in</th></tr></thead>
+<tbody>
+<tr><td>tmmx – daily max. temperature</td><td>K → °C (0.1)</td><td>Colour mapping</td></tr>
+<tr><td>pr – daily precipitation</td><td>mm/day (0.1)</td><td>Colour mapping (log/discrete)</td></tr>
+<tr><td>vpd – mean vapour pressure deficit</td><td>kPa (0.01)</td><td>Contour mapping</td></tr>
+<tr><td>vs, th – 10 m wind speed, direction</td><td>m/s (0.1), ° from N (1)</td><td>Quiver, streamlines</td></tr>
+<tr><td colspan="3">Sampled days t1–t10 (2019): 01, 11, 21, 31 Jul; 10, 20, 30 Aug; 09, 19, 29 Sep (every 10th day from 1 Jul)</td></tr>
+</tbody></table>
+</div>
+
+<h3>B. Choice of time instances</h3>
+<p>We sampled <b>uniformly, every 10th day from 1 July</b>, which gives the maximum permitted ten instances and covers 90 of
+the 92 days. Uniform sampling was preferred to random or event-targeted sampling for four reasons: (i) a constant interval
+means that the perceived rate of change in an animation is proportional to the real rate of change, which random gaps would
+distort; (ii) ten days is longer than the 3–7-day lifetime of a weather system, so consecutive frames are nearly independent and
+together trace the seasonal march rather than a single storm; (iii) uniform samples are unbiased for quarter-level statistics,
+which we need for the global colour range, the anomaly baseline and the contour areas; and (iv) the choice is reproducible and was
+made before looking at the maps.</p>
+<p>Fig. 1 places the samples within the daily record and shows what the sampling captures and what it misses. The heat wave is
+captured by t3 (21 Jul): the mean maximum temperature over the north-east was 32.9 °C, one day after its 33.2 °C peak. Tropical
+Storm Imelda is captured by t9 (19 Sep, 295 mm/day at 30.2° N, 93.8° W), although its 707 mm/day peak (29.9° N, 94.2° W) fell on
+18 Sep. The
+northern-Rockies cold outbreak is captured by t10 (29 Sep, the coldest day of the quarter in Montana, with a mean maximum of
+3.2 °C). The samples miss Hurricane Barry's rainfall maximum (365 mm on 14 Jul in south-western Louisiana), Hurricane Dorian's
+passage along the Carolinas coast (251 mm on 5 Sep) and a 413 mm Florida Big Bend event on 17 Aug. These are temporal aliasing
+of short-lived extremes, an unavoidable cost of ten-day sampling; Sec. V-G therefore shows the three storms in close-ups. All
+maxima are taken from the full 4 km grid.</p>
+
+
+<h3>C. Preprocessing of the gridMET fields</h3>
+<ul class="tight">
+<li><b>Masking.</b> 40.3 % of the grid (ocean, Canada, Mexico) is missing. NaNs are kept as masks throughout. Statistics use
+cos φ area weights; areas use per-cell areas (CONUS land = 7.95 M km²). Marching Squares skips cells with a missing corner.</li>
+<li><b>Units and quantisation.</b> Temperature is converted from K to °C. VPD is stored in 0.01 kPa steps and precipitation in
+0.1 mm steps. Both matter: exact ties at isovalues (Sec. IV) and empty histogram bins below 0.3 mm (Fig. 8d).</li>
+<li><b>Day convention.</b> A gridMET day ends at midnight Mountain Standard Time (07 UTC the next day), so an evening storm in the
+East can fall on the following day's map.</li>
+<li><b>Projection.</b> All maps use a Lambert conformal conic projection (standard parallels 33° and 45° N, central meridian
+96° W). Because it is conformal, arrow directions are preserved, but only if the vectors are handed over correctly. cartopy [7]
+interprets vectors given in longitude–latitude coordinates as rates of change of longitude and latitude, and a degree of longitude
+is only cos φ as long as a degree of latitude. We therefore divide the eastward component by cos φ and rescale the pair to the true
+speed before cartopy rotates it into the projection. Without this step diagonal winds are turned towards the meridian, by a median
+of 5.0° and up to 12.0° on t10 (11.7° for a north-easterly at 49° N); with it, the projected directions agree with a
+finite-difference reference to better than 0.01° and speeds are unchanged. All quiver plots and streamlines use the corrected
+vectors. The map extent is fitted to the valid cells.</li>
+<li><b>Anomalies</b> are taken relative to the per-cell mean of the ten samples, which under uniform sampling is an unbiased
+estimate of the quarter mean.</li>
+<li><b>Wind vectors</b> follow the meteorological convention: <i>th</i> is the direction the wind blows <i>from</i>, clockwise from
+north, so</li>
+</ul>
+<p class="eq"><i>u</i> = −<i>v<sub>s</sub></i> sin θ,&nbsp;&nbsp; <i>v</i> = −<i>v<sub>s</sub></i> cos θ. <span class="eqn">(1)</span></p>
+<p class="noind">For streamlines the field is interpolated onto a regular grid in projected metres, and grid points more than
+18 km from any valid land cell are masked so that no streamline is drawn over water.</p>
+
+<figure class="h95"><img src="figures/Fig01_gridmet_daily_overview_sampling.jpg">
+<figcaption>Fig. 1. Daily CONUS statistics for 1 Jul–30 Sep 2019 (all 92 days; precipitation on the full 4 km grid, the other
+variables on every 4th grid cell) with the ten uniformly sampled days t1–t10 (dotted lines) and five notable weather events
+(grey bands). Maximum temperature: area-weighted mean and 5th–95th
+percentile band; precipitation: area-weighted mean (bars) and grid-cell maximum; vapour pressure deficit and wind speed: mean
+and 95th percentile.</figcaption></figure>
+<h3>D. EM-DAT country profiles (A1 dataset)</h3>
+<p>The A1 dataset is the EM-DAT [3] country-profile export on Kaggle [4]: 10,431 rows × 13 columns, 225 entities, 1900–2023,
+one row per year × country × disaster type × subtype. Each row gives the number of events, people affected, deaths, damage
+in original and CPI-adjusted US$, and the CPI. All rows belong to the “Natural” group (5 subgroups, 13 types, 25 subtypes).
+EM-DAT records an event if it caused at least 10 deaths, affected at least 100 people, or led to an emergency declaration or a
+call for international assistance [3]. Table III lists the data problems we found and how each was handled.</p>
+
+<div class="tbl wide">
+<div class="tcap"><span class="tn">TABLE III</span>Data-quality issues in the EM-DAT country profiles and their handling (numbers from <span class="mono">emdat_cleaning_log.txt</span>)</div>
+<table>
+<thead><tr><th>Issue</th><th>Evidence</th><th>Handling</th></tr></thead>
+<tbody>
+<tr><td>Format</td><td>“;” separator, decimal comma in CPI; header typo “Disaster Subroup”; trailing spaces (“Extreme temperature ”)</td><td>explicit parser options; columns renamed; labels stripped</td></tr>
+<tr><td>Missing subtype</td><td>2,133 rows (20.4 %), mostly floods and storms</td><td>kept as “&lt;type&gt; (unspecified)”; for the network, unspecified floods (1,928 events) and storms (694) re-assigned in proportion to the country's specified subtypes</td></tr>
+<tr><td>Missing impacts</td><td>affected 27.3 %, deaths 29.3 %, damage 63.2 % of rows blank</td><td>treated as “not reported” (NaN), never as zero; sums use only reported values; the share of records with a damage figure becomes an analysis variable (Sec. VII)</td></tr>
+<tr><td>Damage adjustment</td><td>adjusted = original × 100 / CPI (CPI = 100 in 2022); 2023 rows have no CPI</td><td>relation verified (max. relative error 2.0×10<sup>−4</sup>); 4 values for 2023 kept at base-year prices</td></tr>
+<tr><td>Partial year</td><td>2023 has 75 events vs. 388 per year in 2018–2022 (snapshot of 6 Apr 2023)</td><td>2023 excluded from all temporal analyses and from the treemap</td></tr>
+<tr><td>Sparse early record</td><td>only 9.3 % of events occurred before 1970</td><td>cross-sectional analyses use 1970–2022; long-run views keep 1900–2022 and are interpreted with care</td></tr>
+<tr><td>Historical entities</td><td>9 entities (USSR, Yugoslavia, Czechoslovakia, East/West Germany, North/South Yemen, Serbia–Montenegro, Netherlands Antilles; 149 events) and 2 territories (Azores, Canary Is.)</td><td>kept in aggregates; assigned to the region of the successor or administering state; excluded from country-level comparisons</td></tr>
+<tr><td>No geography</td><td>no region or continent field</td><td>UN M49 sub-region (22) and continent added from ISO3 codes</td></tr>
+<tr><td>Names</td><td>UN long forms; two “Korea” and two “Congo” after shortening</td><td>unique short display names per ISO3 code</td></tr>
+<tr><td>Small countries</td><td>many entities with only a handful of events</td><td>country-level analyses use the 167 of 216 current entities with ≥ 10 events in 1970–2022</td></tr>
+</tbody></table>
+</div>
+
+<h3>E. Derived network, multivariate, hierarchical and time-series data</h3>
+<p>The A1 table is not itself a network, a hierarchy or a multivariate table of comparable units, so each InfoVis task needed
+a remodelled dataset (Table IV). The network links countries whose mix of hazards is similar. The multivariate table gives one
+profile row per country, or per country and decade. The hierarchy rolls the table up into a decade × country × subtype cube from
+which several trees can be built. The time series are annual (or binned) totals and record-level distributions. Because the
+source has no month field, the required temporal variations use yearly vs. 5-year and decadal granularity, as well as different
+groups.</p>
+
+<div class="tbl wide">
+<div class="tcap"><span class="tn">TABLE IV</span>Datasets derived from the A1 table for the InfoVis tasks</div>
+<table>
+<thead><tr><th>Task</th><th>Derived dataset</th><th>Size</th></tr></thead>
+<tbody>
+<tr><td>Node-link (Sec. VI)</td><td>country nodes with a 15-category hazard-share profile; edges between countries with similar profiles (Bhattacharyya coefficient, 4 nearest neighbours ≥ 0.70, plus maximum spanning tree)</td><td>167 nodes, 474 edges</td></tr>
+<tr><td>Parallel coordinates (Sec. VII)</td><td>12 dimensions: events, deaths, affected, damage, deaths/event, 4 subgroup shares, number of hazard types, growth 1996–2022 vs. 1970–1995, share of records with damage reported; k-means clusters</td><td>167 countries; 622 country-decades</td></tr>
+<tr><td>Treemap (Sec. VII)</td><td>rollup decade × continent × sub-region × country × subgroup × type × subtype with 4 measures, remodelled into 4 trees in the browser</td><td>4,937 leaf records</td></tr>
+<tr><td>Horizon / ridgeline (Sec. VIII)</td><td>annual events by type (1950–2022), annual deaths by continent (1970–2022), 5-year rates, record-level distributions by type, decade and continent</td><td>10 + 5 + 10 series; ≈ 10 k records</td></tr>
+</tbody></table>
+</div>
+
+<h2>III. SciVis Task 1: Colour Mapping <span class="owner">(Lakshya Jain)</span></h2>
+<p>A colour map assigns each scalar value a colour through a normalisation <i>n</i>(<i>x</i>) = (<i>x</i> − <i>a</i>)/(<i>b</i> − <i>a</i>) followed by
+a palette lookup. Our experiments vary the palette, the transfer function (linear, logarithmic, discrete), the midpoint (sequential
+vs. diverging) and the parameters <i>a</i>, <i>b</i> (global vs. local minimum and maximum) [9]–[13].</p>
+<h3>A. Palettes</h3>
+<p>Fig. 2 maps the heat-wave day t3 (21 Jul) with four palettes on the same 9–49 °C range. Panel (e) shows each palette's
+CIE L* lightness profile. Viridis rises monotonically from L* ≈ 15 to 91 and YlOrRd falls monotonically from 99 to 26, so equal
+steps in data look like equal steps in colour. Both show the hottest areas (the Mojave and Sonoran deserts and the Central
+Valley above 45 °C), the cooler mountain ranges as thin lines (the lapse rate makes peaks 10–15 °C cooler) and the heat-wave
+footprint along the Mid-Atlantic and north-east (32–38 °C). YlOrRd has an intuitive “heat” connotation, but most of the country
+then falls into saturated oranges and reds, so the 30–38 °C range that carries the heat-wave signal has little contrast. Jet
+reaches L* ≈ 90 at 0.38 of its range, stays nearly flat until 0.63 and then falls. Its bright cyan and yellow bands create false
+boundaries near 22 °C and 35 °C that look like fronts but are artefacts of the palette [9]; it is also not safe for colour-blind
+readers or greyscale printing. The diverging RdYlBu_r palette centred at 35 °C (d) is the only one here that answers a threshold
+question, which areas exceed a heat-stress level. That is legitimate only because 35 °C is a meaningful reference [10]. A
+diverging map around an arbitrary centre would split the data into two halves that do not mean anything.</p>
+<figure class="h95"><img src="figures/Fig02_colormap_palettes_tmmx_21Jul2019.jpg">
+<figcaption>Fig. 2. Daily maximum temperature on t3 = 21 Jul 2019 with (a) viridis, (b) YlOrRd, (c) jet and (d) RdYlBu_r centred at
+35 °C; (e) CIE L* lightness of each colormap along its range (dots are the colours themselves).</figcaption></figure>
+
+<h3>B. Continuous vs. discrete mapping</h3>
+<p>Fig. 3 compares a continuous palette with two discrete classifications on t10 (29 Sep), the day with the strongest
+north–south contrast. With equal-interval classes (11 classes of 5 °C), the cold outbreak is a compact, sharply bounded region:
+cells below 10 °C cover 19.9 % of the land, in Montana, Wyoming and Idaho. The class above 35 °C covers only 4.1 %, in Texas and
+the Southeast. Quantile classes (8 classes of equal area) have bounds at −11.5, 6.6, 12.9, 18.5, 23.2, 29.2, 31.9, 33.8 and
+38.6 °C. The lowest class alone spans 18 °C, while the three warmest classes together span 9.4 °C. Quantiles therefore
+exaggerate small differences across the warm South and Plains and hide the magnitude of the cold anomaly. Equal-interval classes
+are preferable when absolute thresholds such as freezing or heat stress matter, and a quantile map is really a rank map.
+Discrete classes make values easy to read off the legend; the continuous map keeps all the detail but makes exact reading
+harder.</p>
+<figure class="h80"><img src="figures/Fig03_discrete_vs_continuous_tmmx_29Sep2019.jpg">
+<figcaption>Fig. 3. Continuous mapping (a) vs. discrete equal-interval (b) and quantile (c) classes of daily maximum temperature on
+t10 = 29 Sep 2019.</figcaption></figure>
+
+<h3>C. Global vs. local minima and maxima across time steps</h3>
+<p>With <b>global</b> normalisation (Fig. 4; GIF <span class="mono">Fig04_…_animation.gif</span>), one scale from −11.5 °C to
+49.5 °C (the extremes over all ten samples) is used for every frame. Colours then mean the same temperature in every panel, so
+the seasonal cooling is visible as a progressive darkening. The northern tier darkens first (t8, 9 Sep), the Great Basin
+follows on t9, and the Montana–Wyoming cold outbreak on t10 is the darkest area of the whole sequence. With <b>local</b>
+normalisation (Fig. 5; GIF <span class="mono">Fig05_…</span>), each frame is stretched to its own range, from 9.4–48.1 °C on t3 to
+−11.5–38.6 °C on t10. Within-day contrast is maximised, which helps the reader see each day's spatial pattern. Across days,
+however, colours lose their meaning: the Southeast on t10 (34 °C) looks as “hot” as the 46 °C deserts on t1, and the animation
+flickers because the scale changes rather than the temperature. Fig. 6 quantifies the trade-off: each day uses only 61–82 % of
+the global range, and the global extremes are set by a handful of cells (desert floors near 49 °C, high peaks on t10 at
+−11.5 °C). A robust global range from the 1st to the 99th percentile (5.2–40.2 °C) would add contrast and keep values
+comparable over time, at the cost of saturating 2 % of the cells. We therefore recommend global or robust-global
+normalisation for any temporal comparison or animation, and local normalisation only for single-day exploration, always with a
+separate colour bar per frame.</p>
+<figure class="h80"><img src="figures/Fig04_tmmx_global_minmax_small_multiples.jpg">
+<figcaption>Fig. 4. Global normalisation: daily maximum temperature on all ten time steps with one colour scale (inferno, −11.5 to 49.5 °C).
+Animation: <span class="mono">images/Fig04_tmmx_global_minmax_animation.gif</span>.</figcaption></figure>
+<figure class="h80"><img src="figures/Fig05_tmmx_local_minmax_small_multiples.jpg">
+<figcaption>Fig. 5. Local normalisation: each time step stretched to its own minimum and maximum (range printed in each title; note the
+different colour bars). Animation: <span class="mono">images/Fig05_tmmx_local_minmax_animation.gif</span>.</figcaption></figure>
+<figure class="h80"><img src="figures/Fig06_tmmx_local_vs_global_ranges.jpg">
+<figcaption>Fig. 6. Distribution of grid-cell values per time step (violins), local ranges (arrows), global range (dashed) and robust
+global range (1st–99th percentile, shaded); the percentages give the share of the global colour range that each day uses.</figcaption></figure>
+
+<h3>D. Diverging colour map for anomalies</h3>
+<p>Absolute temperature has no natural midpoint, but an anomaly does: zero. Fig. 7 (GIF <span class="mono">Fig07_…</span>) maps
+each sample's departure from the ten-sample mean with RdBu_r centred at 0 and symmetric limits of ±21 °C (the 99.5th percentile
+of |anomaly|). The diverging map reveals what neither sequential map can show. 31 Jul (t4) was up to +13 °C warmer than normal
+over Montana and the Dakotas. 20 Aug (t6) was warm over the North-west. The first half of September cooled the whole northern
+half of the country, and on 29 Sep (t10) Montana and Wyoming were up to 25 °C below their quarter mean while the Southeast
+remained 2–5 °C above it. The same 25 °C means “warm” in Montana and “cool” in Texas, so only the anomaly map with a neutral
+white for “normal” lets one colour carry the same meaning everywhere.</p>
+<figure class="h80"><img src="figures/Fig07_tmmx_anomaly_diverging_small_multiples.jpg">
+<figcaption>Fig. 7. Daily maximum-temperature anomaly from the mean of the ten sampled days, diverging RdBu_r centred at 0, clipped at
+±21 °C. Animation: <span class="mono">images/Fig07_tmmx_anomaly_diverging_animation.gif</span>.</figcaption></figure>
+
+<h3>E. Logarithmic and discrete mapping of precipitation</h3>
+<p>Precipitation is zero-inflated and heavy-tailed. On t9 (19 Sep), 66.9 % of land cells were dry (&lt; 0.1 mm), and the wet cells
+had a median of 2.2 mm, a 90th percentile of 15.7 mm, a 99th percentile of 61.2 mm and a maximum of 295 mm (Fig. 8d). A linear
+map (Fig. 8a) squeezes 99 % of the wet cells into the lowest fifth of the palette, so the map shows only Imelda's core between
+Houston and Lake Charles. A logarithmic map (b), with dry cells left neutral grey because log 0 is undefined, reveals the whole
+precipitation field. It shows a frontal rain band from the Upper Midwest to Texas, widespread rain over Oklahoma, Arkansas and
+Louisiana around Imelda's remnant circulation, showers in the northern Rockies and Great Basin, and convection over Florida. A
+multiplicative, roughly log-normal quantity is perceived correctly only on a log scale. Discrete rainfall-intensity classes (c)
+make values readable, e.g. “more than 200 mm” around Beaumont–Port Arthur, at the cost of within-class detail. Fig. 9
+(GIF <span class="mono">Fig09_…</span>) applies one global log scale to all ten days. The wettest days by area were t10
+(38 % of land ≥ 1 mm, a rain shield across the northern tier ahead of the cold outbreak) and t5 (37 %); the West stays mostly dry
+apart from monsoon showers over Arizona, New Mexico and Colorado on t4–t5.</p>
+<figure class="h60"><img src="figures/Fig08_precip_linear_log_discrete_19Sep2019.jpg">
+<figcaption>Fig. 8. Precipitation on t9 = 19 Sep 2019 (Tropical Storm Imelda): (a) linear, (b) logarithmic and (c) discrete colour
+mapping (YlGnBu); (d) log–log histogram of wet cells with percentiles (gaps below 0.3 mm reflect the 0.1 mm storage step).</figcaption></figure>
+<figure class="h80"><img src="figures/Fig09_precip_global_log_small_multiples.jpg">
+<figcaption>Fig. 9. Precipitation on all ten time steps with a global logarithmic colour scale (0.1–295 mm/day). Animation:
+<span class="mono">images/Fig09_precip_global_log_animation.gif</span>.</figcaption></figure>
+
+<h2>IV. SciVis Task 2: Contour Mapping <span class="owner">(Kalpit)</span></h2>
+<h3>A. Choice of field and algorithm</h3>
+<p>Contours were computed for vapour pressure deficit (VPD), the difference between saturation and actual vapour pressure. VPD is
+smooth at synoptic scales and has physically meaningful thresholds: below about 1 kPa the air is humid, and above about 3 kPa it is
+very dry, with high evaporative demand, plant water stress and fire weather. It is also independent of the colour-mapping
+variables. We use <b>both</b> permitted algorithms, each for what it does best. <b>Marching Squares</b> extracts isolines: each grid
+cell is classified independently by which of its four corners lie above the isovalue, and the crossing points are placed on the
+cell edges by linear interpolation [14]. The method is local, so cells with a missing (ocean) corner are simply skipped. It
+achieves sub-cell accuracy, has a deterministic rule for ambiguous saddle cells, and runs in O(<i>N</i>) time, which makes it
+ideal for precise threshold boundaries such as the 1 kPa and 3 kPa lines. <b>Contour fill</b> (matplotlib's contourf [6], [15])
+builds filled polygons between consecutive levels. It answers areal questions (“where is VPD between 2 and 3 kPa, and how
+large is that region?”) and acts as a discretised colour map whose class boundaries are the isolines.</p>
+<h3>B. Implementation and verification</h3>
+<p>Our implementation (<span class="mono">scivis/marching_squares.py</span>) is fully vectorised in NumPy. For a cell with corners
+<i>a</i> (top-left), <i>b</i> (top-right), <i>c</i> (bottom-right) and <i>d</i> (bottom-left), the case index is
+8[<i>a</i> ≥ <i>c</i><sub>0</sub>] + 4[<i>b</i> ≥ <i>c</i><sub>0</sub>] + 2[<i>c</i> ≥ <i>c</i><sub>0</sub>] + [<i>d</i> ≥ <i>c</i><sub>0</sub>], which
+selects one of 16 cases (Fig. 10a). Each crossing lies at <i>t</i> = (<i>c</i><sub>0</sub> − <i>p</i>)/(<i>q</i> − <i>p</i>) along an edge
+<i>pq</i>. The saddle cases 5 and 10 are resolved with the cell-centre value (<i>a</i> + <i>b</i> + <i>c</i> + <i>d</i>)/4. The data revealed one
+subtle issue. VPD is stored in steps of 0.01 kPa, so 3,303 cells on 21 Jul equal exactly 1.00 kPa. An isoline drawn exactly at a
+stored value depends on whether “equal” counts as above or below: our ≥ rule and contourpy's &gt; rule then differ by up to
+1.34°, because flat plateaus at exactly the level are bounded on different sides. We therefore evaluate each nominal level
+<i>L</i> at <i>L</i> − 0.005 kPa, which is unambiguous because it lies between two storable values. With this choice our isolines match
+contourpy's to within 2.9×10<sup>−14</sup>° for all levels, i.e. they are identical up to floating-point rounding (Table V).
+Linear interpolation matters as well. Placing crossings at edge midpoints (Fig. 10b, orange) produces a staircase offset by up to
+half a cell (2 km), whereas the interpolated line (red) follows the reference exactly. In the worked example the 3 kPa isoline
+separates the dry Salt Lake valley from the moister Wasatch Range.</p>
+
+<figure class="h95"><img src="figures/Fig10_marching_squares_algorithm_validation.jpg">
+<figcaption>Fig. 10. (a) The 16-case Marching Squares lookup table, with both resolutions of the saddle cases. (b) Worked example: the 3 kPa
+isoline on a 25 × 25 sub-grid over the Wasatch Front (21 Jul) from our implementation with linear interpolation (red), with
+edge midpoints (orange) and from contourpy (white dashed). (c) Validation summary over the full CONUS field.</figcaption></figure>
+
+<div class="tbl">
+<div class="tcap"><span class="tn">TABLE V</span>Own Marching Squares vs. contourpy, VPD on 21 Jul 2019</div>
+<table>
+<thead><tr><th class="n">Level (kPa)</th><th class="n">Segments</th><th class="n">Length (km)</th><th class="n">Saddles</th><th class="n">Own / lib (ms)</th><th class="n">Hausdorff (°)</th></tr></thead>
+<tbody>
+<tr><td class="n">0.5</td><td class="n">7,800</td><td class="n">22,760</td><td class="n">144</td><td class="n">79 / 6</td><td class="n">1.6e−14</td></tr>
+<tr><td class="n">1.0</td><td class="n">20,873</td><td class="n">60,749</td><td class="n">539</td><td class="n">96 / 9</td><td class="n">2.9e−14</td></tr>
+<tr><td class="n">2.0</td><td class="n">14,175</td><td class="n">42,459</td><td class="n">237</td><td class="n">96 / 7</td><td class="n">2.9e−14</td></tr>
+<tr><td class="n">3.0</td><td class="n">9,376</td><td class="n">29,634</td><td class="n">91</td><td class="n">82 / 5</td><td class="n">2.8e−14</td></tr>
+<tr><td class="n">4.0</td><td class="n">3,720</td><td class="n">11,629</td><td class="n">72</td><td class="n">87 / 5</td><td class="n">2.8e−14</td></tr>
+</tbody></table>
+</div>
+
+<h3>C. Isolines, line contours and filled contours</h3>
+<p>Fig. 11 shows the five isolines on 21 Jul. The 4 kPa isoline encloses the Mojave and Sonoran deserts and the southern Central
+Valley. The 3 kPa isoline extends over the Great Basin and into west Texas. The 1 kPa isoline traces the edge of the humid East
+and wraps around nearly every mountain range in the West as thousands of small closed loops. That makes it the longest isoline
+(60,749 km), even though about 38 % of the land lies below it. The length of an isoline therefore measures how fragmented a
+threshold boundary is, not how large the enclosed area is. Fig. 12 compares the two contour techniques. Isolines alone (a) show
+exactly where the thresholds lie, but the reader must infer which side is higher, and the mountain loops add clutter. Five filled
+bands (b) make regions and their areas readable at a glance, but they hide all variation inside the wide 1–2 kPa band that covers
+much of the Plains. Ten filled levels with the isolines overlaid (c) combine both strengths and show the stepwise gradient from
+the humid Gulf coast to the dry Southwest. The continuous map (d) keeps every detail, but no threshold can be read from it.</p>
+<figure class="h95"><img src="figures/Fig11_vpd_isolines_marching_squares_21Jul2019.jpg">
+<figcaption>Fig. 11. Isolines of daily mean vapour pressure deficit on t3 = 21 Jul 2019 from our Marching Squares implementation
+(0.5–4 kPa) over a grey VPD background; the legend gives the total length of each isoline.</figcaption></figure>
+
+<h3>D. Effect of pre-smoothing</h3>
+<p>At 4 km, VPD follows the terrain, so raw isolines in the West are dominated by small, closed loops. Fig. 13 applies a
+mask-aware Gaussian filter before contouring. It uses normalised convolution, so values near the coast are not pulled towards
+zero by the missing ocean cells. Smoothing with σ = 2 cells (8 km) shortens the total length of the 1–4 kPa isolines over CONUS
+from 144,470 km to 65,379 km (−55 %) and cuts the number of saddle cells at 1 kPa from 539 to 3, while the large-scale boundaries
+barely move. With σ = 5 cells (20 km) the length falls to 39,999 km (−72 %), isolated basins disappear and neighbouring dry
+regions merge. For synoptic interpretation σ ≈ 2 cells is a good compromise. Either way, smoothing alters the data and must be
+disclosed alongside the result.</p>
+<figure class="h95"><img src="figures/Fig12_line_vs_filled_contours_vpd_21Jul2019.jpg">
+<figcaption>Fig. 12. Line contours vs. filled contours of VPD on 21 Jul 2019: (a) five isolines, (b) filled contours with the same five
+levels, (c) ten filled levels with the isolines overlaid, (d) continuous colour mapping for reference.</figcaption></figure>
+<figure class="h80"><img src="figures/Fig13_contour_smoothing_experiment_west.jpg">
+<figcaption>Fig. 13. VPD isolines over the western US on 21 Jul 2019 for the raw field and after Gaussian smoothing with σ = 2 and 5
+cells; the boxes give the CONUS-wide total isoline length and segment count.</figcaption></figure>
+
+<h3>E. Evolution over the ten time steps</h3>
+<p>Fig. 14 (GIF <span class="mono">Fig14_…</span>) uses fixed levels on all ten days, and Fig. 15 summarises the contours
+quantitatively. The very dry region (VPD ≥ 3 kPa) is largest on t3 (0.76 M km², 9.6 % of the land) and t6 (0.68 M km²), when
+it covers the desert Southwest and Great Basin and, on t4–t5, extends over the southern Plains. In September it collapses: to
+0.07 M km² on t8 and 0.12 M km² on t9, and on t10 no grid cell reaches 3 kPa at all. The area with VPD ≥ 2 kPa falls from 33 %
+of the land (t6) to 3 % (t10), and the area with VPD ≥ 1 kPa from 73 % (t1) to 44 % (t10). The ten sampled points (Fig. 15a)
+follow the daily 16 km series closely, which confirms that the uniform samples represent the quarter. The daily series also
+shows day-to-day swings of several percentage points that the samples cannot resolve.</p>
+<figure class="h80"><img src="figures/Fig14_vpd_contours_small_multiples.jpg">
+<figcaption>Fig. 14. Filled VPD contours (fixed levels) with the 1 kPa (blue) and 3 kPa (purple) Marching-Squares isolines for all
+ten time steps. Animation: <span class="mono">images/Fig14_vpd_contours_animation.gif</span>.</figcaption></figure>
+<figure class="h80"><img src="figures/Fig15_vpd_contour_statistics_over_time.jpg">
+<figcaption>Fig. 15. Contour-derived statistics: (a) share of land enclosed by the 2 and 3 kPa isolines on all 92 days (lines, 16 km grid)
+and on the sampled days (dots, 4 km grid); (b) total isoline length per sampled day.</figcaption></figure>
+
+<h2>V. SciVis Task 3: Quiver Plots and Streamlines <span class="owner">(Arnav)</span></h2>
+<h3>A. The wind field</h3>
+<p>Vectors are reconstructed from <i>vs</i> and <i>th</i> with (1). Two properties of the data shape every experiment. First,
+<i>vs</i> and <i>th</i> are distributed as separate daily aggregates, so the reconstructed vector only approximates the daily mean
+wind; on days with turning winds the true vector mean is shorter than <i>vs</i>. Second, gridMET's wind inherits the ≈12 km
+(1/8°) structure of the NLDAS-2 forcing it is derived from [1], [19], and wind is available over land only, so offshore
+circulations such as hurricanes are not visible. Over the quarter the mean speed was 3.0–3.5 m/s in July and August and rose to
+4.0 m/s on t8–t9 and 5.2 m/s on t10 (95th percentile 8.9 m/s; maximum 16.0 m/s over north-west Colorado). The ratio of the
+length of the CONUS-mean vector to the mean speed is only 0.13–0.35 on every day, so there is never a single prevailing flow
+direction. This is why maps, rather than averages, are needed.</p>
+<h3>B. Grid-sampling experiments</h3>
+<p>A 4 km grid has 0.8 M vectors, far too many to draw, so the field must be sampled. In Fig. 16 the arrow length is tied to the
+sampling interval (a 10 m/s arrow spans one interval), which keeps the density of ink comparable across panels. On t10 every
+10th cell (a, 4,816 arrows, 40 km) turns the field into texture whose arrows are too short to read. Every 20th cell
+(b, 1,230 arrows, 80 km) gives the best balance and shows the configuration of the early-season storm. Strong south-westerlies
+cross the Great Basin and the Four Corners ahead of a deep western trough; a southerly flow from the Gulf covers Texas, Oklahoma
+and Kansas; and easterly upslope winds blow behind the cold front over Montana and the Dakotas. Every 40th cell (c, 305 arrows)
+represents the wind shift across the Dakotas with only two or three arrows. Block-averaged vectors (d), the mean <i>u</i> and
+<i>v</i> over each 20 × 20 block, are nearly identical to point samples (b). The median direction difference is only 3°, 0.7 % of
+blocks differ by more than 45°, and within a block the vector-mean speed is 0.99 of the scalar-mean speed (f). Aliasing is
+negligible here because the field has almost no structure below 80 km. Block averaging remains the safer default for noisier,
+finer data. Jittered sampling (e, one random cell per block) removes the regular grid pattern that the eye can mistake for
+structure, at the cost of small local gaps and clumps.</p>
+<figure class="h95"><img src="figures/Fig16_quiver_grid_sampling_experiments.jpg">
+<figcaption>Fig. 16. Quiver grid-sampling experiments on t10 = 29 Sep 2019: regular point sampling every (a) 10th, (b) 20th and (c) 40th
+cell, (d) block-averaged vectors, (e) jittered random sampling, (f) direction difference between point and block-mean vectors.</figcaption></figure>
+<h3>C. Magnitude-proportional vs. same-sized vectors</h3>
+<p>Magnitude-proportional arrows (Fig. 17a) emphasise the strong-wind corridors over the Great Basin and High Plains. In
+light-wind regions such as the Southeast and the Pacific coast they shrink to dots whose direction cannot be read. Same-size
+arrows (b) show direction everywhere and encode speed by colour. They are better for reading circulation patterns, such as the
+contrast between south-westerly and easterly flow on either side of the front. Comparing magnitudes is harder, though, because
+colour is judged less accurately than length. Square-root scaling (c) compresses the 1–16 m/s range into a factor of four, so
+light winds remain visible and strong winds are still longer. It is a good compromise when both direction and magnitude
+matter.</p>
+<figure class="h80"><img src="figures/Fig17_quiver_proportional_vs_uniform.jpg">
+<figcaption>Fig. 17. (a) Magnitude-proportional, (b) same-size (direction-only, speed by colour) and (c) square-root-scaled arrows on
+t10, every 20th cell.</figcaption></figure>
+<h3>D. Streamline seeding strategies</h3>
+<p>Streamlines are integral curves of the field. Their appearance depends on where integration starts (the seeds) and on when it
+stops, at the collision density that keeps lines apart [16], [17]. Fig. 18 and Table VI compare four strategies on t10 with the
+same collision density, so only the seeds differ. Density-based seeding, matplotlib's evenly-spaced placement, tries seeds in
+every empty cell. It produces 106 streamlines that cover 56 % of the 60 km land cells, the most uniform picture. Uniform-grid
+and random seeding with 126 seeds each produce only 52 and 56 streamlines (39 % coverage each). Many seeds fall into cells
+already crossed by a streamline and are rejected, and random seeds leave visible gaps and clusters. Feature-based seeding, with
+seeds drawn from the fastest 5 % of the field (≥ 8.9 m/s), deliberately ignores calm regions. Its 21 streamlines trace exactly
+where the strong flow goes: from the Great Basin into Wyoming, and up the Plains towards the Great Lakes.</p>
+<div class="tbl">
+<div class="tcap"><span class="tn">TABLE VI</span>Streamline seeding strategies, 29 Sep 2019</div>
+<table>
+<thead><tr><th>Strategy</th><th class="n">Seeds</th><th class="n">Streamlines</th><th class="n">Coverage</th></tr></thead>
+<tbody>
+<tr><td>Density-based (evenly spaced)</td><td class="n">auto</td><td class="n">106</td><td class="n">55.7 %</td></tr>
+<tr><td>Uniform grid</td><td class="n">126</td><td class="n">52</td><td class="n">38.9 %</td></tr>
+<tr><td>Random</td><td class="n">126</td><td class="n">56</td><td class="n">38.8 %</td></tr>
+<tr><td>Feature-based (top 5 % speed)</td><td class="n">126</td><td class="n">21</td><td class="n">15.9 %</td></tr>
+</tbody></table>
+</div>
+<figure class="h95"><img src="figures/Fig18_streamline_seeding_strategies.jpg">
+<figcaption>Fig. 18. Streamline seeding strategies on t10: (a) density-based, (b) uniform grid, (c) random and (d) feature-based seeds
+(pink dots); colour and width encode speed.</figcaption></figure>
+<h3>E. Quiver plots vs. streamlines</h3>
+<p>Fig. 19 contrasts the two methods in strong flow (t10, a zoom on the Central Rockies and High Plains) and in weak flow
+(t3, all of CONUS). Streamlines expose the topology of the flow that arrows only imply. On 29 Sep they show the confluence line
+where the south-westerlies over Utah meet the easterly upslope flow over Wyoming and Montana, roughly along the Continental
+Divide, together with the turning of the southerly Plains flow towards the north-east. On 21 Jul they show the large-scale
+circulation behind the weak arrows: south-westerly flow around the Atlantic subtropical high over the East, which fed warm, humid
+air into the heat wave, and northerly flow behind the cold front over the central Plains. Quiver plots, in turn, show the local
+magnitude at every sampled point without bias and need no integration. Streamlines lose magnitude unless it is encoded by width
+or colour, as in Fig. 18. They also suggest a continuous, physically consistent flow that a daily mean field does not strictly
+have. We therefore use streamlines for structure and quiver plots for local measurement, a division of labour that is consistent with user studies of 2D vector-field methods [18].</p>
+<figure class="h95"><img src="figures/Fig19_quiver_vs_streamlines_comparison.jpg">
+<figcaption>Fig. 19. Quiver plots (left) vs. streamlines (right) in strong flow (29 Sep, Central Rockies and High Plains, top) and weak
+flow (21 Jul, CONUS, bottom).</figcaption></figure>
+<h3>F. Evolution over the ten time steps</h3>
+<p>Figs. 20 and 21 (GIFs <span class="mono">Fig20_…</span>, <span class="mono">Fig21_…</span>) show the wind on all ten days.
+July and August are dominated by weak, disorganised flow (CONUS mean 3.0–3.5 m/s), with the persistent strong winds limited to
+the Pacific coast gaps and the southern Plains. From t8 the flow strengthens and organises around passing troughs, ending in the
+strong, spatially coherent pattern of t10, which is also the day with the largest anomalies in temperature (Fig. 7) and
+precipitation area (Fig. 9).</p>
+<figure class="h80"><img src="figures/Fig20_wind_quiver_small_multiples.jpg">
+<figcaption>Fig. 20. Wind speed (colour) and magnitude-proportional quiver (every 34th cell) for all ten time steps. Animation:
+<span class="mono">images/Fig20_wind_quiver_animation.gif</span>.</figcaption></figure>
+<figure class="h80"><img src="figures/Fig21_wind_streamlines_small_multiples.jpg">
+<figcaption>Fig. 21. Streamlines (density-based seeding; colour and width = speed) for all ten time steps. Animation:
+<span class="mono">images/Fig21_wind_streamlines_animation.gif</span>.</figcaption></figure>
+<h3>G. Storm close-ups between the samples</h3>
+<p>The ten-day sampling misses the three tropical cyclones of the quarter (Sec. II-B). Fig. 22 shows them on the 4 km grid on
+the day of strongest impact, with corrected quiver plots over wind speed (top) and streamlines over log-scaled precipitation
+(bottom). To quantify what the panels show we computed the relative vorticity and divergence of the wind after a 36 km
+mask-aware box smoothing.</p>
+<ul class="tight">
+<li><b>Barry, 13 Jul</b> (landfall in Louisiana [8]). The strongest daily-mean winds of the three storms, up to 15.0 m/s, blow
+over the Mississippi delta. North-easterlies over Mississippi turn into easterlies across northern Louisiana, and onshore
+southerlies at the coast meet them at the 223 mm rain maximum (29.8° N, 92.1° W): 71 % of the area with ≥ 100 mm is convergent
+(mean divergence −7.7×10<sup>−5</sup> s<sup>−1</sup>). The closed circulation, however, lies over the Gulf, where gridMET has no
+data. Over land the flow curves clockwise as it weakens inland, so the land-mean vorticity is even slightly negative
+(−0.8×10<sup>−5</sup> s<sup>−1</sup>).</li>
+<li><b>Dorian, 5 Sep</b> (centre offshore, moving up the coast). Easterlies of 9–10 m/s blow onshore over North Carolina,
+south-westerlies follow the South Carolina coast and north-westerlies blow offshore over Georgia. The streamlines wrap
+counter-clockwise around north-eastern South Carolina, next to the 251 mm maximum (33.5° N, 79.1° W), and the land-mean vorticity
+(+0.7×10<sup>−5</sup> s<sup>−1</sup>) is higher than on any of the ten sampled days in the same window (at most +0.6).</li>
+<li><b>Imelda, 18 Sep</b> (slow-moving remnant over south-east Texas). The wind is weak, at most 7.7 m/s and 3.4 m/s on average,
+yet this is the wettest day of the quarter (707 mm at 29.9° N, 94.2° W; 14,656 km² with ≥ 100 mm). The streamlines show why:
+onshore southerlies from the Gulf converge with north-easterlies over eastern Texas over the rain maximum; 88 % of the
+≥ 100 mm area is convergent (mean −6.7×10<sup>−5</sup> s<sup>−1</sup>, against +0.5×10<sup>−5</sup> s<sup>−1</sup> where it stayed
+dry).</li>
+</ul>
+<p class="noind">Heavy rainfall is thus tied to sustained convergence and slow motion, not to wind speed. The close-ups also show
+the limits of the data: a daily-mean, land-only wind field smears a moving storm and cannot show a closed hurricane
+circulation.</p>
+<figure class="h95"><img src="figures/Fig22_storm_closeups_barry_dorian_imelda.jpg">
+<figcaption>Fig. 22. Storm close-ups at 4 km on days between the samples: (a, d) Hurricane Barry, 13 Jul; (b, e) Hurricane Dorian,
+5 Sep; (c, f) Tropical Storm Imelda, 18 Sep 2019. Top: wind speed with magnitude-proportional arrows every 8th cell (× = speed
+maximum). Bottom: precipitation (log scale) with streamlines (▲ = rainfall maximum).</figcaption></figure>
+
+<h2>VI. InfoVis Task 1: Node-Link Diagram <span class="owner">(Kalpit)</span></h2>
+<h3>A. Building the network</h3>
+<p>The network is built, analysed and laid out with NetworkX [26]. Each of the 167 countries is described by the share of its 1970–2022 events in 15 hazard categories: riverine, flash and
+coastal flood; tropical cyclone, extra-tropical storm and convective storm; heat wave; cold wave or winter; earthquake; volcanic
+activity; drought; landslide; avalanche; wildfire; and insect infestation. Unspecified floods and storms were re-assigned in
+proportion to each country's specified subtypes (Table III). The similarity of two profiles <i>p</i>, <i>q</i> is the Bhattacharyya
+coefficient [20]</p>
+<p class="eq">BC(<i>p</i>, <i>q</i>) = Σ<sub><i>k</i></sub> √(<i>p<sub>k</sub></i> <i>q<sub>k</sub></i>) ∈ [0, 1], <span class="eqn">(2)</span></p>
+<p class="noind">which compares distributions and is not dominated by the largest category. Each country is linked to its four most
+similar countries if BC ≥ 0.70, and the maximum spanning tree of the complete similarity graph is added so that every country
+is reachable. The result has 474 edges (472 nearest-neighbour edges and 2 spanning-tree edges), density 0.034, mean degree 5.7
+(maximum 12, Germany and Niger), average clustering 0.37 and diameter 10, which makes it a sparse but well-connected network.
+Louvain community detection [21] on the similarity-weighted graph finds 8 communities with modularity Q = 0.69.</p>
+<h3>B. Layouts</h3>
+<p>Fig. 23 draws the network with the Fruchterman–Reingold force-directed layout [22], coloured by community (a) and by continent
+(b). The communities are hazard regimes, not geographic regions. C2 (tropical cyclones, 30 countries) groups Caribbean and
+Pacific islands with Japan, the Philippines, Taiwan, South Korea, Vietnam, Mexico, Madagascar and Mauritius. C4 (riverine flood
+and earthquake, 22 countries) follows the Alpine–Himalayan and Andean seismic belts from Italy, Turkey and Iran to Nepal,
+Indonesia, Peru and New Zealand and spans all five continents. C3 (riverine flood and drought) is almost entirely the Sahel and
+southern Africa (23 of 25). C5 (extra-tropical storm and riverine flood) is all of north-western and central Europe. Large,
+multi-hazard countries such as China, India, the US and Indonesia sit in the middle because their mixed profiles resemble many
+others; India's most similar countries are Bangladesh (0.95), China (0.94), Thailand (0.92), Pakistan (0.91) and Russia (0.90).
+The countries with the highest betweenness, Haiti (0.15), Romania, Bosnia and Herzegovina, Thailand and Niger, are bridges
+whose profiles mix two regimes. The labels of the most active countries are placed by a greedy collision-free algorithm: in
+order of events, each label tries eight positions around its node on three rings (with a leader line beyond the first) and is
+kept only where it overlaps neither another label nor a labelled node. Fig. 24 shows four more layouts: Kamada–Kawai [23], ForceAtlas2 [24], spectral [25] and a
+circular layout ordered by community.</p>
+<figure><img src="figures/Fig23_network_fruchterman_reingold.jpg">
+<figcaption>Fig. 23. Country network of similar natural-disaster regimes, Fruchterman–Reingold layout, coloured by (a) Louvain
+community and (b) continent; node area ∝ number of events; dashed edges belong to the maximum spanning tree.</figcaption></figure>
+<h3>C. Quantitative comparison</h3>
+<p>We measured each layout with six criteria, computed on positions normalised to the unit square (Fig. 25, Table VII).
+ForceAtlas2 with distributed attraction gives the tightest, most readable clusters, with the fewest crossings (754) and the best
+neighbourhood preservation (0.36): for each node, the overlap between its graph neighbours and its nearest neighbours in the
+drawing. Fruchterman–Reingold is close behind and has the most uniform edge lengths. Kamada–Kawai places nodes by
+graph-theoretic distance. It preserves global distances well (low stress) but lets communities overlap, giving the lowest
+silhouette (0.20) and the most crossings among the force methods (1,010), and it is the slowest because it works on all pairs.
+The spectral layout runs in 18 ms and reveals the network's main gradient as a “V”: one arm is extra-tropical Europe, the vertex
+is the flood and seismic core, and the other arm is the tropical-cyclone islands. Many nodes overlap at the vertex, however
+(edge-length variation 0.90). The circular layout separates communities perfectly by construction (silhouette 0.45), but its
+inter-community edges become a hairball of 5,756 crossings, 6.7 times more than Fruchterman–Reingold. No layout wins on every
+criterion. Force-directed layouts are best for exploring clusters, spectral for the dominant ordering, and circular for
+comparing groups.</p>
+<figure><img src="figures/Fig24_network_layout_comparison.jpg">
+<figcaption>Fig. 24. The same network under (a) Kamada–Kawai, (b) ForceAtlas2, (c) spectral and (d) circular (ordered by community)
+layouts, coloured by community, with run times.</figcaption></figure>
+<div class="tbl wide">
+<div class="tcap"><span class="tn">TABLE VII</span>Layout quality (167 nodes, 474 edges; ↓ lower is better, ↑ higher is better)</div>
+<table>
+<thead><tr><th>Layout</th><th class="n">Run time (s) ↓</th><th class="n">Edge crossings ↓</th><th class="n">Normalised stress ↓</th><th class="n">Edge-length CV ↓</th><th class="n">Neighbourhood pres. ↑</th><th class="n">Community silhouette ↑</th></tr></thead>
+<tbody>
+<tr><td>Fruchterman–Reingold</td><td class="n">0.27</td><td class="n">858</td><td class="n">0.0009</td><td class="n">0.50</td><td class="n">0.31</td><td class="n">0.26</td></tr>
+<tr><td>Kamada–Kawai</td><td class="n">0.76</td><td class="n">1,010</td><td class="n">0.0010</td><td class="n">0.67</td><td class="n">0.33</td><td class="n">0.20</td></tr>
+<tr><td>ForceAtlas2</td><td class="n">0.48</td><td class="n">754</td><td class="n">0.0014</td><td class="n">0.66</td><td class="n">0.36</td><td class="n">0.27</td></tr>
+<tr><td>Spectral</td><td class="n">0.02</td><td class="n">797</td><td class="n">0.0023</td><td class="n">0.90</td><td class="n">0.29</td><td class="n">0.29</td></tr>
+<tr><td>Circular (by community)</td><td class="n">&lt; 0.01</td><td class="n">5,756</td><td class="n">0.0101</td><td class="n">1.10</td><td class="n">0.17</td><td class="n">0.45</td></tr>
+</tbody></table>
+</div>
+<figure class="h80"><img src="figures/Fig25_network_layout_metrics.jpg">
+<figcaption>Fig. 25. Quantitative comparison of the five layouts.</figcaption></figure>
+<h3>D. What the communities mean</h3>
+<p>Fig. 26 confirms the interpretation. The tropical-cyclone community draws on average 66 % of its events from tropical
+cyclones, and the Sahel community 58 % from riverine floods, most of the rest being droughts. The European community is 100 %
+European and the Sahel community 92 % African, whereas the cyclone, seismic and convective-storm communities each span three or
+more continents. Disaster regimes follow climate and plate tectonics, not political geography.</p>
+<figure class="h80"><img src="figures/Fig26_network_community_profiles.jpg">
+<figcaption>Fig. 26. (a) Mean hazard profile and (b) continent composition of the eight Louvain communities.</figcaption></figure>
+<h3>E. User interaction</h3>
+<p>The interactive viewer (<span class="mono">code/web/network.html</span>) uses the positions computed by NetworkX and adds user
+interactions (Fig. 27). The user can switch between the five layouts with animated transitions, or run a live d3-force
+simulation. Nodes can be coloured by community or continent and sized by events, deaths, degree or betweenness. Edges can be
+filtered by minimum similarity and nodes by minimum number of events, and continents can be toggled on and off. There is a
+search box, clicking a node focuses on its neighbourhood (with its hazard profile and most similar countries listed), and the
+view supports zooming, panning and dragging nodes. Filtering is especially useful for node-link diagrams. Keeping only edges with
+BC ≥ 0.9 and countries with ≥ 50 events (Fig. 27c) reduces the drawing to a backbone of 73 countries and 123 edges, in which the
+European group (top), the tropical-cyclone group (bottom left) and the flood–seismic core separate clearly. Labels in the
+viewer are placed with the same collision-avoiding strategy. The network is also exported in GEXF format
+(<span class="mono">data/processed/network_disaster_regimes.gexf</span>) with all node and edge attributes, the ForceAtlas2
+positions, community colours and event-based sizes, so that it opens ready-styled in Gephi [39] for further editing.</p>
+<figure class="h65"><img src="figures/Fig27a_network_viewer_forceatlas2.jpg">
+<figcaption>Fig. 27(a). Interactive network viewer: ForceAtlas2 layout coloured by community, with the legend and the layout-quality
+panel.</figcaption></figure>
+<figure class="h65"><img src="figures/Fig27b_network_viewer_focus_india.jpg">
+<figcaption>Fig. 27(b). Focus + context: clicking India highlights its five most similar countries and shows its hazard profile
+(Fruchterman–Reingold layout, continent colouring).</figcaption></figure>
+<figure class="h65"><img src="figures/Fig27c_network_viewer_filtered.jpg">
+<figcaption>Fig. 27(c). Filtering: edges with similarity ≥ 0.90 and countries with ≥ 50 events only, Kamada–Kawai layout with all labels.</figcaption></figure>
+
+<h2>VII. InfoVis Task 2: Parallel Coordinates and Zoomable Treemap <span class="owner">(Lakshya Jain)</span></h2>
+<h3>A. Multivariate data and clusters</h3>
+<p>The parallel-coordinates plot (PCP) [28] (<span class="mono">code/web/parallel_coordinates.html</span>, implemented in D3 [27], which is bundled in
+<span class="mono">code/web/lib/</span> so that all pages work offline) shows the 12 dimensions of
+Table IV for the 167 countries, or, in a second view, for 622 country-decades (1970s–2010s, ≥ 3 events), where growth is
+replaced by a decade axis. Heavy-tailed variables use symmetric-log axes so that zeros stay visible. Rows were clustered with
+k-means (k-means++ initialisation, 25 restarts) on standardised features, with log-transformed counts. <i>k</i> was chosen by
+silhouette. The country view uses <i>k</i> = 3 (silhouette 0.24, against 0.19–0.22 for <i>k</i> = 4–7). The decade view uses
+<i>k</i> = 5, which we preferred because its silhouette lies within 0.02 of the best. The three country clusters are:</p>
+<ul class="tight">
+<li>flood-dominated, under-reported countries (68; median hydrological share 63 %, damage reported for only 18 % of records,
+36 of them African);</li>
+<li>high-impact, high-volume countries (52; median 108 events, 20,349 deaths, 114 deaths per event and seven hazard types, e.g.
+the US, China, the Philippines, India, Indonesia and Bangladesh);</li>
+<li>storm-dominated countries (47; median meteorological share 67 %, six deaths per event and the highest damage reporting,
+45 %).</li>
+</ul>
+<h3>B. Edge bundling and interactions</h3>
+<p>We implemented cluster-based curved bundling following the illustrative and edge-bundling PCP literature [29]–[31]. For a row
+in group <i>g</i>, between adjacent axes <i>i</i> and <i>i</i>+1, the polyline passes through a midpoint</p>
+<p class="eq"><i>y</i><sub>m</sub> = (1 − β) (<i>y<sub>i</sub></i> + <i>y</i><sub><i>i</i>+1</sub>)/2 + β (<i>c<sub>g,i</sub></i> + <i>c</i><sub><i>g,i</i>+1</sub>)/2, <span class="eqn">(3)</span></p>
+<p class="noind">where <i>c<sub>g,i</sub></i> is the group's centroid on axis <i>i</i> and β ∈ [0, 1] is the bundling strength. The axis points
+and midpoints are joined by cubic Bézier segments whose control points are offset by a smoothness parameter <i>s</i>. With
+β = <i>s</i> = 0 the plot reduces exactly to classical straight polylines. Bundling can be by k-means cluster or by continent. The
+plot supports all the required interactions:</p>
+<ul class="tight">
+<li><b>brushing</b> on any number of axes, combined with AND, with live counts and a list of the selected rows;</li>
+<li><b>axis reordering</b> by dragging an axis title, and <b>axis inversion</b> by double-clicking it;</li>
+<li>the β and <i>s</i> sliders, legend filtering, search and hover details.</li>
+</ul>
+<p class="noind">The view state can be set in the URL, so every screenshot here can be reproduced.</p>
+<h3>C. Insights from the PCP</h3>
+<p>Without bundling (Fig. 28), 167 lines overplot heavily. The four subgroup-share axes sum to about one, which produces X-shaped
+crossings (hydrological vs. meteorological share: <i>r</i> = −0.86), and the clusters are hard to follow beyond the first axes.
+With β = 0.8 (Fig. 29) the three clusters become three bundles whose trajectories can be read end to end. The orange
+high-impact bundle runs along the top of the four impact axes and the hazard-type axis. The green flood bundle rises on
+hydrological share and falls on damage reporting. The purple storm bundle rises on meteorological share and on damage
+reporting. The price is accuracy: values are exact only on the axes, never between them.</p>
+<p>Brushing turns the plot into a query tool. Selecting countries where at least 60 % of records report damage (Fig. 30a)
+returns 15 countries: the US, China, the Philippines, Vietnam, Australia, South Korea, Taiwan, Germany, Fiji, Jamaica, Tonga, the
+Bahamas, Belize, Sweden and Samoa. Nearly all are storm-prone, high-income, or both. Across all countries, damage reporting
+correlates with meteorological share (<i>r</i> = 0.62) and anti-correlates with hydrological share (−0.52), and its median is 13 %
+in Africa against 40 % in Europe and 55 % in Oceania. The damage totals therefore over-represent cyclone-exposed and rich
+countries [37]. Africa's 1.3 % share of 1970–2022 damage is partly a reporting artefact and should not be read as low economic
+loss. Brushing deaths per event ≥ 100 (Fig. 30b) selects 29 countries (13 Asian, 7 American, 5 European, 4 African). At the top
+are Ethiopia (4,425 deaths per event, from drought famines), Sudan, Myanmar (Cyclone Nargis), Haiti (the 2010 earthquake),
+Bangladesh and Mozambique. The European entries (France, Italy, Russia and Spain) come from heat-wave mortality, notably in
+2003 and 2010. The decade view
+(Fig. 31) has its axes reordered so that decade comes first, next to the shares, and its damage-reporting axis inverted. It
+shows the median deaths per event falling from 29.7 in the 1970s to 10.9 in the 2010s. Over the same decades the flood-dominated
+cluster grows from 26 to 59 country-decades, while the deadly geophysical cluster shrinks from 17 to 7. The growth axis also
+contains a data artefact. Its five highest values (Czechia 33, Croatia 32, Bosnia and Herzegovina 29, Serbia 28 and Slovakia 24,
+against a median of 2.7) belong to states created in 1991–93. Their earlier events are recorded under Yugoslavia or
+Czechoslovakia, so the growth is state succession, not hazard.</p>
+<figure><img src="figures/Fig28_pcp_countries_no_bundling.jpg">
+<figcaption>Fig. 28. Parallel coordinates of 167 countries (1970–2022), coloured by k-means cluster, without bundling (β = 0).</figcaption></figure>
+<figure><img src="figures/Fig29_pcp_countries_bundled.jpg">
+<figcaption>Fig. 29. The same plot with cluster-based edge bundling (β = 0.8, smoothness 0.18).</figcaption></figure>
+<figure><img src="figures/Fig30a_pcp_brush_damage_reported.jpg">
+<figcaption>Fig. 30(a). Brushing: countries with damage reported for ≥ 60 % of records (15 of 167), coloured by continent; the side panel lists
+the selection.</figcaption></figure>
+<figure><img src="figures/Fig30b_pcp_brush_deadly_events.jpg">
+<figcaption>Fig. 30(b). Brushing: countries with ≥ 100 deaths per event (29 of 167).</figcaption></figure>
+<figure><img src="figures/Fig31_pcp_decades_reordered_bundled.jpg">
+<figcaption>Fig. 31. Country-decade view (622 rows) with reordered axes (decade first, shares next), inverted damage-reporting axis and bundling
+by the five k-means clusters (β = 0.7).</figcaption></figure>
+
+<h3>D. Zoomable treemap: remodelling the table into trees</h3>
+<p>A treemap [32], [33] needs a tree, while the A1 data is a flat table. Our treemap
+(<span class="mono">code/web/treemap.html</span>) builds the tree in the browser from the 4,937-row rollup using a
+user-selected order of categorical columns, which gives four remodels of the same table:</p>
+<ul class="tight">
+<li>Continent › Sub-region › Country › Hazard type;</li>
+<li>Hazard group › Type › Subtype › Continent;</li>
+<li>Hazard group › Type › Continent › Country;</li>
+<li>Decade › Hazard group › Type › Subtype.</li>
+</ul>
+<p class="noind">Leaf size can be events, deaths, people affected or damage, and a period filter (1900, 1970 or 2000 onwards) is
+available. Two levels are drawn at a time. Clicking a block zooms into it with an animated transition, breadcrumbs lead back up,
+and hovering shows the value, the share of the parent and the share of the total.</p>
+<h3>E. Insights from the treemap</h3>
+<p>By events (Fig. 32, 1900–2022), Asia leads with 6,261 events (42 %), ahead of the Americas (26 %), Africa (14 %), Europe (13 %)
+and Oceania (4 %). Southern, South-eastern and Eastern Asia are almost equal (1,932, 1,909 and 1,811 events). Sizing by deaths
+and zooming into Asia › Southern Asia (Fig. 33) tells a different story. The sub-region holds 7.61 M deaths, 33 % of all
+disaster deaths since 1900. India's 4.59 M deaths are 93 % drought, dominated by three famine-droughts (1900, 1942 and 1965,
+with 1.25–1.5 M deaths each). Bangladesh's 2.59 M deaths split into drought (1.90 M, the 1943 Bengal famine) and storms
+(0.63 M, the 1970 and 1991 cyclones). A few historical famines thus dominate the century-long toll. Restricted to 1970–2022,
+the ranking changes to Bangladesh (0.52 M), China, Ethiopia, Haiti, Indonesia and India (0.19 M).</p>
+<p>Re-sizing the hazard tree by measure (Fig. 34, 1970–2022) answers “which hazard matters most?” differently each time.
+Hydrological hazards are the most frequent (46 % of events), and floods affect the most people (47 %). Geophysical hazards
+cause the most deaths (39 %; earthquakes alone 38 %) from only 9 % of events. Meteorological hazards cause the most damage
+(44 %; storms 42 %). The time hierarchy (Fig. 35) shows recorded events growing from 74 in the 1900s to 808 in the 1970s and
+3,872 in the 2000s (the peak), with 3,504 in the 2010s. Geophysical events make up 66 % of the 1900s records but only 9 % of the
+2010s records, which confirms that the early record favours large, well-documented earthquakes and eruptions.</p>
+<figure><img src="figures/Fig32_treemap_geography_events.jpg">
+<figcaption>Fig. 32. Zoomable treemap, hierarchy Continent › Sub-region › Country › Type, sized by events (1900–2022, squarified tiling).</figcaption></figure>
+<figure><img src="figures/Fig33_treemap_zoom_southern_asia_deaths.jpg">
+<figcaption>Fig. 33. After zooming into Asia › Southern Asia, sized by deaths (1900–2022): countries split by hazard type.</figcaption></figure>
+<figure><img src="figures/Fig34a_treemap_hazard_deaths.jpg">
+<figcaption>Fig. 34(a). Hazard hierarchy (Group › Type › Subtype › Continent) sized by deaths, 1970–2022.</figcaption></figure>
+<figure><img src="figures/Fig34b_treemap_hazard_damage.jpg">
+<figcaption>Fig. 34(b). The same tree sized by damage (2022 US$), 1970–2022.</figcaption></figure>
+<figure><img src="figures/Fig35_treemap_time_events.jpg">
+<figcaption>Fig. 35. Time hierarchy (Decade › Group › Type › Subtype) sized by events, 1900–2022.</figcaption></figure>
+<h3>F. Spatial partitioning strategies</h3>
+<p>The treemap offers six tiling algorithms: squarified, binary, slice-and-dice, slice, dice and resquarified. The side panel
+reports the aspect ratios of the visible tiles. Fig. 36 and Table VIII compare three of them on Asia's sub-regions and countries
+(1970–2022). Slice-and-dice alternates the split direction by level, which preserves order and makes parent groups easy to see,
+but small countries become slivers. Ten tiles have an aspect ratio above 10, the mean ratio is 17.3, and four countries are too
+thin to render at all. Squarified tiling (target ratio φ = 1.618) produces compact tiles with a median ratio of 1.91 but
+scatters the order. Binary tiling, which splits the list into halves of equal weight, gave the most square tiles here (median
+1.54, no slivers) while keeping a rough order. Resquarified tiling keeps tile positions stable when the measure changes, which
+matters during interaction more than raw aspect ratio.</p>
+<div class="tbl">
+<div class="tcap"><span class="tn">TABLE VIII</span>Tiling quality, Asia › sub-region › country (events, 1970–2022)</div>
+<table>
+<thead><tr><th>Tiling</th><th class="n">Tiles</th><th class="n">Median AR</th><th class="n">Mean AR</th><th class="n">AR &gt; 10</th></tr></thead>
+<tbody>
+<tr><td>Squarified</td><td class="n">51</td><td class="n">1.91</td><td class="n">2.55</td><td class="n">2</td></tr>
+<tr><td>Slice-and-dice</td><td class="n">47</td><td class="n">3.76</td><td class="n">17.29</td><td class="n">10</td></tr>
+<tr><td>Binary</td><td class="n">51</td><td class="n">1.54</td><td class="n">1.81</td><td class="n">0</td></tr>
+</tbody></table>
+</div>
+<figure class="row">
+<div class="sub"><img src="figures/Fig36a_treemap_tiling_squarified.jpg"><div class="sublabel">(a) Squarified</div></div>
+<div class="sub"><img src="figures/Fig36b_treemap_tiling_slicedice.jpg"><div class="sublabel">(b) Slice-and-dice</div></div>
+<div class="sub"><img src="figures/Fig36c_treemap_tiling_binary.jpg"><div class="sublabel">(c) Binary</div></div>
+<figcaption>Fig. 36. Spatial partitioning strategies on the same subtree (Asia › sub-region › country, events, 1970–2022).</figcaption>
+</figure>
+
+<h2>VIII. InfoVis Task 3: Horizon and Ridgeline Plots <span class="owner">(Arnav)</span></h2>
+<h3>A. Methods</h3>
+<p>A horizon chart [34], [35] folds a time series into <i>n</i> = 3 bands of height <i>h</i> = <i>v</i><sub>max</sub>/3. Band <i>k</i> shows
+clip(<i>v</i> − <i>k h</i>, 0, <i>h</i>) in a darker shade, and negative values are mirrored upwards in red. Each series therefore occupies a
+third of the height of an area chart with the same resolution, so ten series fit in one figure. Ridgeline plots [36] stack
+kernel density estimates (Gaussian kernel, Scott bandwidth [38], weighted by the number of events) with partial overlap, each
+row normalised to the same peak height and sorted by its weighted median. As the source is yearly, the required variations are
+different groups (disaster types, continents, decades) and different temporal granularity (yearly vs. 5-year bins and
+decades). The year 2023 is excluded.</p>
+<h3>B. Horizon plots</h3>
+<p>Fig. 37 shows annual events per type, 1950–2022, each row scaled to its own maximum. Every type grows, but not equally.
+Before 1986, weather-related types had recorded only a small part of their 1950–2022 events: insect infestations 6.5 %,
+extreme temperature 8.3 %, floods 13.5 % and storms 20.2 %. For earthquakes and volcanic activity the share is 28 % and 27 %.
+Large geophysical events were always reported, so the much steeper growth of weather-related records since the mid-1980s
+reflects improved registration (EM-DAT was established in 1988) and rising exposure, as well as any change in hazard frequency.
+The dark bands mark peak years: floods in 2006 (226 events), extreme temperature in 2012 (52), drought in 2015 (27, the
+2015–16 El Niño) and insect infestations in 1986–89 (the desert-locust upsurge).</p>
+<p>Because the total number of records grows more than fourfold, from 81 events per year in the 1970s to 350 in the 2010s,
+raw counts make every row of Fig. 37 say “more disasters lately”. Fig. 38 removes this common factor. Each row shows the type's
+share of all events in a centred 5-year window minus its 1970–2022 share, on a common scale with bands of 2.5 percentage points
+(pp), blue above and red (mirrored) below. The mix of hazards changes. Floods rise from 32.1 % of the events in the 1970s to
+43.7 % in the 2010s (more than 5 pp below their mean until the early 1990s, well above it since 2004), extreme temperature from
+1.9 % to 5.9 % and wildfires from 0.9 % to 2.8 %. Earthquakes fall from 13.6 % to 7.5 %, storms from 33.9 % to 28.5 % and
+droughts from 7.5 % to 4.8 %. Shares are not free of reporting effects either (a type whose small events became easier to
+register gains share), but they remove the overall growth and show relative change, which raw counts cannot.</p>
+<p>Fig. 39 changes both the group (continents) and the quantity: each year's deaths are shown as log<sub>10</sub>(deaths + 1)
+minus the continent's median year, in bands of 0.5 log units (≈ 3×), blue above and red below the median. Median annual deaths
+differ by more than two orders of magnitude, from 12,971 in Asia to 57 in Oceania. The two most extreme years of each continent
+are major catastrophes:</p>
+<ul class="tight">
+<li>Africa: 1983 (450,529 deaths, 475× its median; the Ethiopian and Sudanese drought-famine) and 1973;</li>
+<li>the Americas: 2010 (225,727; the Haiti earthquake) and 1970 (67,784; the Ancash earthquake in Peru);</li>
+<li>Asia: 1970 (317,526; the Bhola cyclone) and 1976 (254,994; the Tangshan earthquake);</li>
+<li>Europe: 2003 (72,298; 129×) and 2010 (56,472), both heat waves;</li>
+<li>Oceania: 1998 (2,215; the Papua New Guinea tsunami).</li>
+</ul>
+<p class="noind">Asia's extremes are only about 20× its median because its baseline is high. Europe and the Americas, in contrast, are
+quiet with rare catastrophes. Since about 2011 Asia's row is mostly red, i.e. below its median, which is consistent with falling
+mortality from cyclones and floods.</p>
+<p>Fig. 40 aggregates the data of Fig. 37 into 5-year bins (mean events per year, so the three-year bin 2020–22 is comparable).
+Year-to-year noise such as El Niño years disappears and the trend remains. Floods and storms peak in the most recent bin;
+earthquakes, landslides, droughts and wildfires peak in 2000–04, extreme temperature in 2010–14 and insect infestations in
+1985–89. The yearly chart is better for locating events, and the 5-year chart for comparing trends.</p>
+<figure class="h75"><img src="figures/Fig37_horizon_events_by_type_yearly.jpg">
+<figcaption>Fig. 37. Horizon chart of the annual number of events per disaster type, 1950–2022 (yearly; each row scaled to its own maximum, three bands).</figcaption></figure>
+<figure class="h75"><img src="figures/Fig38_horizon_event_share_anomaly_by_type.jpg">
+<figcaption>Fig. 38. Horizon chart of each disaster type's share of the recorded events (centred 5-year window) minus its
+1970–2022 share, 1970–2022 (common scale, bands of 2.5 pp; blue above, red mirrored below; mean share on the right).</figcaption></figure>
+<figure class="h80"><img src="figures/Fig39_horizon_deaths_by_continent_anomaly.jpg">
+<figcaption>Fig. 39. Horizon chart of annual deaths per continent relative to the continent's median year (log scale; blue above, red mirrored below), 1970–2022.</figcaption></figure>
+<figure class="h75"><img src="figures/Fig40_horizon_events_by_type_5year.jpg">
+<figcaption>Fig. 40. Horizon chart of events per disaster type at 5-year granularity (mean events per year in each bin), 1950–2022.</figcaption></figure>
+<h3>C. Ridgeline plots</h3>
+<p>Fig. 41 shows, for each type, the distribution of the years in which its events occurred, 1900–2022. Sorted by median year,
+the types form a clear sequence: insect infestations (1988), dry mass movements (1990), earthquakes (1993), volcanic activity
+(1996), droughts (1999), landslides (2000), storms (2001), wildfires (2002), extreme temperature (2005) and floods (2006).
+Floods and temperature extremes are the “youngest” part of the record. Earthquakes and volcanoes have long tails back to 1900,
+and insect infestations form a sharp pulse in the late 1980s. Fig. 42 switches to decades as groups. The distribution of deaths
+per event moves left by almost an order of magnitude, with medians of 92 (1950s), 59, 38, 33, 18.6, 12.8 and 12.7 (2010s). This
+reflects real improvements in warning and preparedness, but also the registration of many more small events: the share of
+records with zero or unreported deaths rises from 8.5 % in the 1950s to about 30 % from the 1970s onwards. Fig. 43 uses
+continents as groups. The median number of people affected per event is 1,200 in Europe, 2,500 in Oceania, 5,000 in the
+Americas, 20,600 in Africa and 41,900 in Asia. The 35-fold gap between Europe and Asia reflects population density, exposure and
+vulnerability, and Africa's wide distribution reflects droughts that affect millions of people at once.</p>
+<figure class="h95"><img src="figures/Fig41_ridgeline_event_years_by_type.jpg">
+<figcaption>Fig. 41. Ridgeline plot of the year of occurrence of the events of each disaster type (1900–2022, weighted by events; black tick = median).</figcaption></figure>
+<figure class="h95"><img src="figures/Fig42_ridgeline_deaths_per_event_by_decade.jpg">
+<figcaption>Fig. 42. Ridgeline plot of deaths per event by decade, 1950s–2010s (log scale).</figcaption></figure>
+<figure class="h95"><img src="figures/Fig43_ridgeline_affected_per_event_by_continent.jpg">
+<figcaption>Fig. 43. Ridgeline plot of people affected per event by continent, 1970–2022 (log scale).</figcaption></figure>
+
+<h2>IX. Discussion</h2>
+<p><i>Parameter choices decide what is seen.</i> In every task one parameter changed the message: global vs. local
+normalisation and linear vs. log scaling (Sec. III), the isovalue tie rule and smoothing (Sec. IV), sampling stride, arrow scaling
+and seeding (Sec. V), <i>k</i> and the similarity threshold (Sec. VI), bundling strength and the treemap measure (Sec. VII), and
+per-row vs. common scaling (Sec. VIII). We therefore state these parameters in each caption and keep them identical across
+compared panels.</p>
+<p><i>Visualization exposes data artefacts.</i> Several findings concern the data, not the phenomena: quantisation ties in VPD,
+storage gaps in precipitation, the underestimated storm maxima of a 16 km subsample, damage-reporting bias, state-succession
+“growth”, the partial year 2023 and the geophysical bias of early records. Tools can introduce artefacts too: vectors given in
+longitude–latitude must be converted before cartopy projects them (Sec. II-C). Handling them (Tables III–IV) is a precondition for correct inferences.</p>
+<p><i>Interaction is essential for InfoVis.</i> Brushing turned the PCP into a query tool (Fig. 30). Zooming in the treemap
+revealed that a few famines dominate the century-long death toll (Fig. 33). Filtering and focus reduced the network to readable
+backbones (Fig. 27).</p>
+<p><i>Limitations.</i> The reconstructed daily-mean wind is an approximation and, over land only, cannot show a hurricane's
+closed circulation (Fig. 22). Ten uniform samples miss short extremes such as Barry and Dorian, which we show separately. The country-profile export has no event-level records, months or locations, which limits temporal granularity to years.
+The network depends on <i>k</i> and the BC threshold, and Louvain is stochastic (we fix the seed). Bundled PCPs distort values
+between axes. Finally, our quality measures are computational, not results of a user study.</p>
+
+<h2>X. Conclusion</h2>
+<p>The gridMET slice for July–September 2019 showed the seasonal retreat of heat and dry air: the area with VPD ≥ 3 kPa fell from
+0.76 M km² to zero. It also captured a heat wave, Tropical Storm Imelda and an early cold outbreak; 4 km close-ups added the
+storms between the samples and showed that Imelda's record rain came from weak but convergent winds. The tasks showed that colour-map
+normalisation, contour thresholds and vector sampling must be chosen deliberately to show such features faithfully. The EM-DAT
+analyses showed that disaster regimes follow climate and tectonics rather than continents; that frequency, mortality, people
+affected and damage rank hazards differently; and that a large part of the apparent growth in disasters is a property of the
+record itself, while the shares of floods and temperature extremes did grow. Each visualization is reproducible from the scripts in <span class="mono">code/</span> (see the README).</p>
+
+<h2>Contributions of Team Members</h2>
+<p class="noind"><b>Lakshya Jain (BT2024044)</b> designed and implemented SciVis Task 1, colour mapping
+(<span class="mono">scivis/color_mapping.py</span>; Figs. 2–9 and four GIFs), and InfoVis Task 2: the multivariate and
+hierarchical data builder (<span class="mono">infovis/build_web_data.py</span>), the JavaScript parallel-coordinates plot with edge
+bundling and the zoomable treemap (<span class="mono">web/parallel_coordinates.html</span>, <span class="mono">web/treemap.html</span>,
+<span class="mono">js/pcp.js</span>, <span class="mono">js/treemap.js</span>; Figs. 28–36). He wrote Sections III and VII.</p>
+<p class="noind"><b>Kalpit (BT2024093)</b> designed and implemented SciVis Task 2, contour mapping: the Marching Squares implementation
+and its validation, and the contour-fill, smoothing and temporal experiments (<span class="mono">scivis/marching_squares.py</span>,
+<span class="mono">scivis/contour_mapping.py</span>; Figs. 10–15 and a GIF). He also built InfoVis Task 1: network construction, the
+NetworkX layouts and metrics, the collision-free labelling, the Gephi export and the interactive viewer
+(<span class="mono">infovis/network_layouts.py</span>,
+<span class="mono">web/network.html</span>, <span class="mono">js/network.js</span>; Figs. 23–27). He wrote Sections IV and VI.</p>
+<p class="noind"><b>Arnav (BT2024233)</b> designed and implemented SciVis Task 3: quiver plots, the grid-sampling and arrow-scaling
+experiments, the latitude correction of the vector transform, streamlines with four seeding strategies and the storm close-ups
+(<span class="mono">scivis/quiver_streamlines.py</span>; Figs. 16–22 and two GIFs). He also built InfoVis Task 3, the horizon and ridgeline plots (<span class="mono">infovis/horizon_ridgeline.py</span>;
+Figs. 37–43). He wrote Sections V and VIII.</p>
+<p class="noind"><b>Joint work.</b> Data download, cleaning and processing for both datasets, and the shared utilities
+(<span class="mono">data_prep/*</span>, <span class="mono">scivis/common.py</span>, <span class="mono">web/js/common.js</span>,
+<span class="mono">tools/*</span>; Fig. 1), were done jointly. So were Sections I, II, IX and X and the README.</p>
+
+<h2>References</h2>
+<div class="refs">
+<p>[1] J. T. Abatzoglou, “Development of gridded surface meteorological data for ecological applications and modelling,” <i>Int. J. Climatology</i>, vol. 33, no. 1, pp. 121–131, 2013.</p>
+<p>[2] Climatology Lab, “gridMET,” https://www.climatologylab.org/gridmet.html (accessed Oct. 2026).</p>
+<p>[3] D. Guha-Sapir, R. Below, and Ph. Hoyois, “EM-DAT: The CRED/OFDA International Disaster Database,” Université catholique de Louvain, Brussels, Belgium, www.emdat.be.</p>
+<p>[4] mexwell, “Natural Disasters (Emergency Events Database),” Kaggle, https://www.kaggle.com/datasets/mexwell/natural-disasters-emergency-events-database (accessed Oct. 2026).</p>
+<p>[5] S. Hoyer and J. Hamman, “xarray: N-D labeled arrays and datasets in Python,” <i>J. Open Research Software</i>, vol. 5, no. 1, p. 10, 2017.</p>
+<p>[6] J. D. Hunter, “Matplotlib: A 2D graphics environment,” <i>Computing in Science &amp; Engineering</i>, vol. 9, no. 3, pp. 90–95, 2007.</p>
+<p>[7] Met Office, “Cartopy: a cartographic Python library with a Matplotlib interface,” https://scitools.org.uk/cartopy.</p>
+<p>[8] National Hurricane Center, “Tropical Cyclone Reports – 2019 Atlantic Hurricane Season,” NOAA, https://www.nhc.noaa.gov/data/tcr/.</p>
+<p>[9] D. Borland and R. M. Taylor II, “Rainbow color map (still) considered harmful,” <i>IEEE Computer Graphics and Applications</i>, vol. 27, no. 2, pp. 14–17, 2007.</p>
+<p>[10] K. Moreland, “Diverging color maps for scientific visualization,” in <i>Advances in Visual Computing (ISVC)</i>, LNCS 5876, 2009, pp. 92–103.</p>
+<p>[11] M. Harrower and C. A. Brewer, “ColorBrewer.org: An online tool for selecting colour schemes for maps,” <i>The Cartographic Journal</i>, vol. 40, no. 1, pp. 27–37, 2003.</p>
+<p>[12] P. Kovesi, “Good colour maps: How to design them,” arXiv:1509.03700, 2015.</p>
+<p>[13] S. van der Walt and N. Smith, “A better default colormap for Matplotlib,” talk at SciPy 2015, Austin, TX, 2015.</p>
+<p>[14] W. E. Lorensen and H. E. Cline, “Marching cubes: A high resolution 3D surface construction algorithm,” <i>ACM SIGGRAPH Computer Graphics</i>, vol. 21, no. 4, pp. 163–169, 1987.</p>
+<p>[15] ContourPy developers, “ContourPy: Python library for calculating contours of 2D quadrilateral grids,” https://contourpy.readthedocs.io.</p>
+<p>[16] B. Jobard and W. Lefer, “Creating evenly-spaced streamlines of arbitrary density,” in <i>Visualization in Scientific Computing ’97</i>, Springer, 1997, pp. 43–55.</p>
+<p>[17] G. Turk and D. Banks, “Image-guided streamline placement,” in <i>Proc. SIGGRAPH ’96</i>, 1996, pp. 453–460.</p>
+<p>[18] D. H. Laidlaw <i>et al.</i>, “Comparing 2D vector field visualization methods: A user study,” <i>IEEE Trans. Vis. Comput. Graphics</i>, vol. 11, no. 1, pp. 59–70, 2005.</p>
+<p>[19] K. E. Mitchell <i>et al.</i>, “The multi-institution North American Land Data Assimilation System (NLDAS),” <i>J. Geophys. Res.</i>, vol. 109, D07S90, 2004.</p>
+<p>[20] A. Bhattacharyya, “On a measure of divergence between two statistical populations defined by their probability distributions,” <i>Bull. Calcutta Math. Soc.</i>, vol. 35, pp. 99–109, 1943.</p>
+<p>[21] V. D. Blondel, J.-L. Guillaume, R. Lambiotte, and E. Lefebvre, “Fast unfolding of communities in large networks,” <i>J. Stat. Mech.</i>, P10008, 2008.</p>
+<p>[22] T. M. J. Fruchterman and E. M. Reingold, “Graph drawing by force-directed placement,” <i>Software: Practice and Experience</i>, vol. 21, no. 11, pp. 1129–1164, 1991.</p>
+<p>[23] T. Kamada and S. Kawai, “An algorithm for drawing general undirected graphs,” <i>Information Processing Letters</i>, vol. 31, no. 1, pp. 7–15, 1989.</p>
+<p>[24] M. Jacomy, T. Venturini, S. Heymann, and M. Bastian, “ForceAtlas2, a continuous graph layout algorithm for handy network visualization designed for the Gephi software,” <i>PLoS ONE</i>, vol. 9, no. 6, e98679, 2014.</p>
+<p>[25] Y. Koren, “Drawing graphs by eigenvectors: theory and practice,” <i>Computers &amp; Mathematics with Applications</i>, vol. 49, no. 11–12, pp. 1867–1888, 2005.</p>
+<p>[26] A. A. Hagberg, D. A. Schult, and P. J. Swart, “Exploring network structure, dynamics, and function using NetworkX,” in <i>Proc. 7th Python in Science Conf.</i>, 2008, pp. 11–15.</p>
+<p>[27] M. Bostock, V. Ogievetsky, and J. Heer, “D³: Data-driven documents,” <i>IEEE Trans. Vis. Comput. Graphics</i>, vol. 17, no. 12, pp. 2301–2309, 2011.</p>
+<p>[28] A. Inselberg, “The plane with parallel coordinates,” <i>The Visual Computer</i>, vol. 1, no. 2, pp. 69–91, 1985.</p>
+<p>[29] K. T. McDonnell and K. Mueller, “Illustrative parallel coordinates,” <i>Computer Graphics Forum</i>, vol. 27, no. 3, pp. 1031–1038, 2008.</p>
+<p>[30] G. Palmas, M. Bachynskyi, A. Oulasvirta, H.-P. Seidel, and T. Weinkauf, “An edge-bundling layout for interactive parallel coordinates,” in <i>Proc. IEEE PacificVis</i>, 2014, pp. 57–64.</p>
+<p>[31] J. Heinrich and D. Weiskopf, “State of the art of parallel coordinates,” in <i>Eurographics 2013 – State of the Art Reports</i>, 2013, pp. 95–116.</p>
+<p>[32] B. Johnson and B. Shneiderman, “Tree-maps: A space-filling approach to the visualization of hierarchical information structures,” in <i>Proc. IEEE Visualization ’91</i>, 1991, pp. 284–291.</p>
+<p>[33] M. Bruls, K. Huizing, and J. J. van Wijk, “Squarified treemaps,” in <i>Data Visualization 2000</i>, Springer, 2000, pp. 33–42.</p>
+<p>[34] T. Saito, H. N. Miyamura, M. Yamamoto, H. Saito, Y. Hoshiya, and T. Kaseda, “Two-tone pseudo coloring: Compact visualization for one-dimensional data,” in <i>Proc. IEEE InfoVis</i>, 2005, pp. 173–180.</p>
+<p>[35] J. Heer, N. Kong, and M. Agrawala, “Sizing the horizon: The effects of chart size and layering on the graphical perception of time series visualizations,” in <i>Proc. ACM CHI</i>, 2009, pp. 1303–1312.</p>
+<p>[36] C. O. Wilke, <i>Fundamentals of Data Visualization</i>. O’Reilly Media, 2019.</p>
+<p>[37] M. Gall, K. A. Borden, and S. L. Cutter, “When do losses count? Six fallacies of natural hazards loss data,” <i>Bull. Amer. Meteor. Soc.</i>, vol. 90, no. 6, pp. 799–809, 2009.</p>
+<p>[38] D. W. Scott, <i>Multivariate Density Estimation: Theory, Practice, and Visualization</i>. Wiley, 1992.</p>
+<p>[39] M. Bastian, S. Heymann, and M. Jacomy, “Gephi: An open source software for exploring and manipulating networks,” in
+<i>Proc. Int. AAAI Conf. Weblogs and Social Media (ICWSM)</i>, 2009, pp. 361–362.</p>
+</div>
+
+</div>
+</body>
+</html>

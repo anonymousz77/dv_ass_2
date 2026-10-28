@@ -1,0 +1,11 @@
+PCP country: 167 rows, k-means silhouette {3: 0.24, 4: 0.199, 5: 0.205, 6: 0.216, 7: 0.193} -> k=3
+   cluster 1 (68): low records with damage reported, low meteorological share; e.g. Malaysia, Kenya, Tanzania, Uganda, DR Congo, Malawi
+   cluster 2 (52): high deaths, high events; e.g. United States, China, Philippines, India, Indonesia, Bangladesh
+   cluster 3 (47): high meteorological share, low hydrological share; e.g. Canada, Taiwan, Madagascar, Germany, Hong Kong, Cuba
+PCP decade: 622 rows, k-means silhouette {3: 0.205, 4: 0.189, 5: 0.191, 6: 0.195, 7: 0.182} -> k=5
+   cluster 1 (204): high hydrological share, low meteorological share; e.g. Canada 2000s, Kenya 2000s, Nigeria 2000s, Greece 2000s, France 1980s, Malaysia 2000s
+   cluster 2 (138): high events, high hazard types (count); e.g. China 2010s, China 2000s, United States 1990s, United States 2000s, United States 2010s, China 1990s
+   cluster 3 (116): high meteorological share, low hydrological share; e.g. United Kingdom 1990s, Germany 1990s, Taiwan 2010s, Germany 2010s, Poland 2000s, Belgium 2010s
+   cluster 4 (104): low damage (2022 us$), low records with damage reported; e.g. Burundi 2000s, Tanzania 2000s, Mali 2000s, Niger 2000s, Mali 2010s, Vanuatu 2000s
+   cluster 5 (60): high geophysical share, high deaths per event; e.g. Indonesia 1980s, Indonesia 1990s, Iran 2000s, Iran 2010s, Indonesia 1970s, Afghanistan 1990s
+treemap rollup: 4937 rows (decade x country x subtype), 1900-2022

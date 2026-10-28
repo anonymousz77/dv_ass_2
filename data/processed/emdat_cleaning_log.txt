@@ -1,0 +1,11 @@
+raw rows=10431, columns=13, years=1900-2023, entities=225
+missing subtype filled: 2133 rows (20.4%)
+adjusted damage = original*100/CPI verified, max relative error 1.96e-04
+adjusted damage filled for 4 rows of [np.int64(2023)] (CPI missing)
+missing affected: 27.3% of rows (kept as NaN = not reported)
+missing deaths: 29.3% of rows (kept as NaN = not reported)
+missing damage_usd_adj: 63.2% of rows (kept as NaN = not reported)
+historical entities: 9 (149 events); territories: 2
+events in 2023 (snapshot 2023-04-06): 75 vs mean 2018-2022: 388 -> 2023 treated as partial and excluded from temporal analyses
+share of all events recorded before 1970: 9.3%
+country profile 1970-2022: 216 current entities, 167 with >= 10 events

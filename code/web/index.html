@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DAS732 A2 – InfoVis</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>DAS732 Programming Assignment 2 – InfoVis browser visualisations</h1>
+    <span class="sub">Team Pythagoras · Lakshya Jain (BT2024044) · Kalpit (BT2024093) · Arnav (BT2024233)</span>
+  </header>
+  <div class="cards">
+    <div class="card">
+      <h2><a href="network.html">Node-link diagram and layout comparison</a></h2>
+      <p>167 countries linked by the similarity of their natural-disaster mix (EM-DAT, 1970–2022). Five NetworkX layouts
+        (Fruchterman–Reingold, Kamada–Kawai, ForceAtlas2, spectral, circular) plus a live force simulation, with
+        filtering, focus on a country, zoom and drag.</p>
+      <p><i>Task owner: Kalpit (BT2024093)</i></p>
+    </div>
+    <div class="card">
+      <h2><a href="parallel_coordinates.html">Parallel coordinates with edge bundling</a></h2>
+      <p>12 impact and hazard-mix dimensions for 167 countries (or 622 country-decades). Brushing on several axes,
+        axis reordering by drag, axis inversion, and cluster-based edge bundling with adjustable strength and smoothness.</p>
+      <p><i>Task owner: Lakshya Jain (BT2024044)</i></p>
+    </div>
+    <div class="card">
+      <h2><a href="treemap.html">Zoomable treemap</a></h2>
+      <p>The same EM-DAT table remodelled into four hierarchies (geography, hazard taxonomy, hazard × geography, time),
+        sized by events, deaths, people affected or damage, with six tiling (spatial partitioning) algorithms.</p>
+      <p><i>Task owner: Lakshya Jain (BT2024044)</i></p>
+    </div>
+  </div>
+  <div class="footer-note">Open the pages directly from this folder in a recent browser (Chrome, Edge or Firefox). The data are embedded as JavaScript files in <code>data/</code>; D3 v7.9.0 is bundled in <code>lib/</code>, so the pages also work offline. Append <code>?static=1</code> to disable animations.</div>
+</body>
+</html>

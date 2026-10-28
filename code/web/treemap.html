@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zoomable Treemap – Disaster Impacts</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="lib/d3.v7.9.0.min.js"></script>
+  <script>window.d3 || document.write('<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"><\/script>');</script>
+  <script src="data/treemap_data.js"></script>
+</head>
+<body>
+  <header class="top">
+    <h1>Zoomable treemap</h1>
+    <span class="sub">EM-DAT natural disasters · DAS732 A2 · Team Pythagoras</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="network.html">Network</a>
+      <a href="parallel_coordinates.html">Parallel coordinates</a>
+      <a href="treemap.html" class="active">Treemap</a>
+    </nav>
+  </header>
+  <div class="controls">
+    <label>Hierarchy
+      <select id="hier">
+        <option value="geo">Continent › Sub-region › Country › Hazard type</option>
+        <option value="hazard">Hazard group › Type › Subtype › Continent</option>
+        <option value="hazgeo">Hazard group › Type › Continent › Country</option>
+        <option value="time">Decade › Hazard group › Type › Subtype</option>
+      </select>
+    </label>
+    <label>Size by
+      <select id="measure">
+        <option value="events">Number of events</option>
+        <option value="deaths">Deaths</option>
+        <option value="affected">People affected</option>
+        <option value="damage">Damage (2022 US$)</option>
+      </select>
+    </label>
+    <label>Tiling
+      <select id="tile">
+        <option value="squarify">Squarified</option>
+        <option value="binary">Binary</option>
+        <option value="sliceDice">Slice-and-dice</option>
+        <option value="slice">Slice (horizontal strips)</option>
+        <option value="dice">Dice (vertical strips)</option>
+        <option value="resquarify">Resquarified (stable)</option>
+      </select>
+    </label>
+    <label>Period
+      <select id="period">
+        <option value="1900">1900–2022</option>
+        <option value="1970">1970–2022</option>
+        <option value="2000">2000–2022</option>
+      </select>
+    </label>
+    <button id="up">Zoom out</button>
+  </div>
+  <div class="layout">
+    <div class="chart">
+      <div class="breadcrumb" id="crumbs"></div>
+      <svg id="tm"></svg>
+    </div>
+    <aside class="side">
+      <h3>Current view</h3>
+      <div class="status" id="status"></div>
+      <h3>Largest children</h3>
+      <div class="status" id="top"></div>
+      <h3>Tiling quality</h3>
+      <div class="status" id="aspect"></div>
+      <h3>Interactions</h3>
+      <ul class="help">
+        <li><b>Click</b> a block to zoom into it; click the breadcrumb or <i>Zoom out</i> to go back up.</li>
+        <li><b>Hover</b> for the value, share of parent and share of the total.</li>
+        <li>Change the <b>hierarchy</b> to remodel the same table into a different tree, the <b>size</b> measure, the <b>tiling</b> (spatial partitioning) algorithm, or the <b>period</b>.</li>
+      </ul>
+    </aside>
+  </div>
+  <div class="footer-note">Each leaf is a sum over country × year × hazard-subtype records of the EM-DAT country profiles (2023 excluded as a partial year). Deaths, people affected and damage are only summed where reported; damage is CPI-adjusted to 2022 US$.</div>
+  <script src="js/common.js"></script>
+  <script src="js/treemap.js"></script>
+</body>
+</html>

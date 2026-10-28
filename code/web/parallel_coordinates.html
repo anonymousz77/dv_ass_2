@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Parallel Coordinates – Disaster Profiles</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="lib/d3.v7.9.0.min.js"></script>
+  <script>window.d3 || document.write('<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"><\/script>');</script>
+  <script src="data/pcp_data.js"></script>
+</head>
+<body>
+  <header class="top">
+    <h1>Parallel coordinates with edge bundling</h1>
+    <span class="sub">EM-DAT natural disasters, 1970–2022 · DAS732 A2 · Team Pythagoras</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="network.html">Network</a>
+      <a href="parallel_coordinates.html" class="active">Parallel coordinates</a>
+      <a href="treemap.html">Treemap</a>
+    </nav>
+  </header>
+  <div class="controls">
+    <label>Rows
+      <select id="view">
+        <option value="country">Countries, 1970–2022 (167)</option>
+        <option value="decade">Country-decades, 1970s–2010s (622)</option>
+      </select>
+    </label>
+    <label>Colour by
+      <select id="color">
+        <option value="cluster">k-means cluster</option>
+        <option value="continent">Continent</option>
+      </select>
+    </label>
+    <label>Bundle by
+      <select id="group">
+        <option value="cluster">k-means cluster</option>
+        <option value="continent">Continent</option>
+      </select>
+    </label>
+    <label>Bundling strength β <input type="range" id="bundle" min="0" max="1" step="0.05" value="0"><span class="val" id="bundleVal">0</span></label>
+    <label>Smoothness <input type="range" id="smooth" min="0" max="0.25" step="0.01" value="0"><span class="val" id="smoothVal">0</span></label>
+    <label>Find <input type="text" id="search" placeholder="country…" size="12"></label>
+    <button id="reset">Reset</button>
+  </div>
+  <div class="layout">
+    <div class="chart"><svg id="pcp"></svg></div>
+    <aside class="side">
+      <h3>Selection</h3>
+      <div class="status" id="status"></div>
+      <h3>Legend (click to filter)</h3>
+      <div id="legend"></div>
+      <h3>Interactions</h3>
+      <ul class="help">
+        <li><b>Brush</b>: drag vertically on any axis; brushes on several axes combine (AND). Click an axis outside the brush to clear it.</li>
+        <li><b>Reorder</b>: drag an axis title left or right.</li>
+        <li><b>Invert</b>: double-click an axis title.</li>
+        <li><b>Bundle</b>: raise β to pull lines of the same group towards the group centroid between axes; raise smoothness to curve them.</li>
+        <li><b>Hover</b> a line for its values.</li>
+      </ul>
+      <h3>Brushed rows</h3>
+      <div class="status" id="list"></div>
+    </aside>
+  </div>
+  <div class="footer-note">Log axes (symmetric log, so zeros remain visible) are used for events, deaths, people affected, damage, deaths per event and growth. Damage is CPI-adjusted to 2022 US$; 0 means “not reported”. Data: EM-DAT country profiles (Kaggle, snapshot 2023-04-06).</div>
+  <script src="js/common.js"></script>
+  <script src="js/pcp.js"></script>
+</body>
+</html>
